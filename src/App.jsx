@@ -73,9 +73,15 @@ export default function Dashboard() {
             Outreach Performance Review
           </h1>
         </div>
-        <div className="mt-4 md:mt-0 flex items-center space-x-2 bg-gray-800 px-4 py-2 rounded-full border border-gray-700">
-          <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-          <span className="text-sm font-medium text-gray-300">Status: Completed</span>
+        <div className="mt-4 md:mt-0 flex items-center space-x-2">
+          <a href="/deep-dive.html" target="_blank" className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors font-medium">
+            <Activity className="w-4 h-4" />
+            <span>Deep Dive</span>
+          </a>
+          <div className="flex items-center space-x-2 bg-gray-800 px-4 py-2 rounded-full border border-gray-700">
+            <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            <span className="text-sm font-medium text-gray-300">Status: Completed</span>
+          </div>
         </div>
       </header>
 
