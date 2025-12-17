@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom';
 import {
     BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
     PieChart, Pie, Cell
@@ -7,7 +8,7 @@ import {
     Users, CheckCircle, XCircle, TrendingUp, Filter, Search,
     ExternalLink, Building2, Award, Target, AlertCircle, Zap,
     ShieldCheck, HardHat, Cpu, Calendar, Globe, Award as Medal, Activity,
-    Server, Network, Code
+    Server, Network, Code, LayoutDashboard, PieChart as PieChartIcon
 } from 'lucide-react';
 
 // Data mapping based on the provided logs (31 Qualified out of 91 Total)
@@ -84,7 +85,15 @@ const MQL = () => {
                             <span>Final Report: {today}</span>
                         </div>
                     </div>
-                    <div className="flex items-center gap-6">
+                    <div className="flex items-center gap-4">
+                        <Link to="/" className="flex items-center space-x-2 text-slate-500 hover:text-indigo-600 transition-colors text-sm font-semibold">
+                            <LayoutDashboard size={16} />
+                            <span>Dashboard</span>
+                        </Link>
+                        <Link to="/trio-leads" className="flex items-center space-x-2 text-slate-500 hover:text-indigo-600 transition-colors text-sm font-semibold mr-4">
+                            <PieChartIcon size={16} />
+                            <span>Trio Leads</span>
+                        </Link>
                         <div className="hidden lg:block text-right border-l pl-6 border-slate-200">
                             <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Targeting Context</p>
                             <p className="text-sm font-black text-slate-800 tracking-tighter">JOB TITLE ONLY</p>
