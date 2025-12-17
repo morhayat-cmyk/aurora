@@ -1,347 +1,377 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
-    BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-    PieChart, Pie, Cell
+    BarChart,
+    Bar,
+    XAxis,
+    YAxis,
+    CartesianGrid,
+    Tooltip,
+    Legend,
+    ResponsiveContainer,
+    PieChart,
+    Pie,
+    Cell,
+    LineChart,
+    Line
 } from 'recharts';
 import {
-    Users, CheckCircle, XCircle, TrendingUp, Filter, Search,
-    ExternalLink, Building2, Award, Target, AlertCircle, Zap,
-    ShieldCheck, HardHat, Cpu, Calendar, Globe, Award as Medal, Activity,
-    Server, Network, Code,
-    ArrowLeft,
+    Users,
+    DollarSign,
+    MousePointer,
+    Target,
+    Globe,
+    Briefcase,
+    Activity,
+    Filter,
+    TrendingUp,
+    Award,
     LayoutDashboard
 } from 'lucide-react';
 
-// Data mapping based on the provided logs (31 Qualified out of 91 Total)
-const rawData = [
-    // Embedded Software Segment (MQLs)
-    { campaign: 'Embedded Software', qualified: 1, name: 'Thomas Kötzner', company: 'SICK Sensor Intelligence', seniority: 'Specialist' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Reut Vaknin', company: 'Rogat Engineering', seniority: 'Engineer' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Manuel Malagon', company: 'AMETEK', seniority: 'Engineer' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Shay Ron', company: 'Maytronics', seniority: 'Lead' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Nagaraj Venkatapuram', company: 'Amazon', seniority: 'Lead' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Mohamed Shehab', company: 'Mallinckrodt Pharmaceuticals', seniority: 'Engineer' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Farzad Baghernezhad', company: 'magniX', seniority: 'Specialist' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Vigneswaran Karunanithi', company: 'ASML', seniority: 'Specialist' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Nagaraju J', company: 'Boston Scientific', seniority: 'Engineer' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Ehu Shubham Shaw', company: 'Lightmatter', seniority: 'Lead' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Anotida David Zimvumi', company: 'GE Aerospace', seniority: 'Engineer' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Elad Malka', company: 'TDK-Lambda Israel', seniority: 'Senior' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Grayham Grega', company: 'Industrial Scientific', seniority: 'Principal' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Dinesh Ravilla', company: 'ASML', seniority: 'Specialist' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Hamza EL MALKI', company: 'AVL Software', seniority: 'Safety Lead' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Abdi Tujuba', company: 'QinetiQ', seniority: 'Engineer' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Tal Gadasi', company: 'Enercon Technologies', seniority: 'Engineer' },
-    { campaign: 'Embedded Software', qualified: 1, name: 'Shaik Saifulla', company: 'Pi Square Technologies', seniority: 'Director' },
+// --- Data Extraction from User Files ---
+const reportData = {
+    "Embedded Software": {
+        audienceSize: 28000,
+        spent: 2152,
+        impressions: 6114,
+        reach: 3285,
+        clicks: 128,
+        ctr: 0.0209,
+        leads: 8,
+        cpl: 269,
+        geoData: [
+            { name: 'United States', impressions: 1273, clicks: 26, leads: 20 },
+            { name: 'Germany', impressions: 835, clicks: 12, leads: 8 },
+            { name: 'Italy', impressions: 405, clicks: 8, leads: 8 },
+            { name: 'Israel', impressions: 381, clicks: 13, leads: 8 },
+            { name: 'Netherlands', impressions: 315, clicks: 12, leads: 10 },
+        ],
+        jobTitles: [
+            "Senior embedded software engineer", "Embedded developer", "Embedded design engineer",
+            "Embedded software engineer", "Embedded system developer", "Senior embedded engineer",
+            "Embedded system software engineer"
+        ]
+    },
+    "Network Engineer": {
+        audienceSize: 150000,
+        spent: 2068,
+        impressions: 8279,
+        reach: 5018,
+        clicks: 119,
+        ctr: 0.0144,
+        leads: 19,
+        cpl: 108.84,
+        geoData: [
+            { name: 'United States', impressions: 2800, clicks: 41, leads: 31 },
+            { name: 'Germany', impressions: 672, clicks: 3, leads: 0 }, // Handled 'Below reporting minimum' as 0
+            { name: 'Italy', impressions: 563, clicks: 13, leads: 11 },
+            { name: 'Israel', impressions: 376, clicks: 5, leads: 3 },
+            { name: 'Netherlands', impressions: 239, clicks: 8, leads: 4 },
+        ],
+        jobTitles: [
+            "Network engineer", "Hardware networking specialist", "Hardware network engineer",
+            "Senior network engineer", "Networking manager", "Director of networking"
+        ]
+    },
+    "Infrastructure Engineer": {
+        audienceSize: 57000,
+        spent: 1961,
+        impressions: 12200,
+        reach: 6563,
+        clicks: 98,
+        ctr: 0.008,
+        leads: 13,
+        cpl: 150.85,
+        geoData: [
+            { name: 'United States', impressions: 2800, clicks: 30, leads: 25 },
+            { name: 'Germany', impressions: 672, clicks: 4, leads: 4 },
+            { name: 'Italy', impressions: 563, clicks: 6, leads: 6 },
+            { name: 'Israel', impressions: 376, clicks: 13, leads: 3 },
+            { name: 'Netherlands', impressions: 239, clicks: 8, leads: 8 },
+        ],
+        jobTitles: [
+            "Infrastructure Manager", "IT Infrastructure Engineer", "Network Infrastructure Engineer",
+            "Lead Infrastructure Engineer", "Manager Infrastructure Engineering", "Principal Infrastructure Engineer"
+        ]
+    }
+};
 
-    // Network Engineers Segment (MQLs)
-    { campaign: 'Network Engineers', qualified: 1, name: 'Sujitha Sekar Rajan', company: 'Meta', seniority: 'Production Eng' },
-    { campaign: 'Network Engineers', qualified: 1, name: 'Shubham Yadav', company: 'TCS', seniority: 'Architect' },
-    { campaign: 'Network Engineers', qualified: 1, name: 'Nityambhu Sankar Bhuyan', company: 'Nokia', seniority: 'Specialist' },
-    { campaign: 'Network Engineers', qualified: 1, name: 'Waqas Sardar', company: 'Hyundai AutoEver', seniority: 'Senior' },
-    { campaign: 'Network Engineers', qualified: 1, name: 'Harshdipsinh Barad', company: 'Atlanticus', seniority: 'Engineer' },
-    { campaign: 'Network Engineers', qualified: 1, name: 'Norton Azzolini', company: 'Fiserv', seniority: 'Architect' },
-    { campaign: 'Network Engineers', qualified: 1, name: 'Jeffery Nyarko', company: 'Philips', seniority: 'Manager' },
-    { campaign: 'Network Engineers', qualified: 1, name: 'William Rucker', company: 'Brightstar Lottery', seniority: 'Engineer' },
+const COLORS = ['#3B82F6', '#10B981', '#F59E0B', '#EF4444', '#8B5CF6'];
 
-    // Infrastructure Engineers Segment (MQLs)
-    { campaign: 'Infrastructure Engineers', qualified: 1, name: 'Finn Cost', company: 'Millennium Space Systems', seniority: 'Ground Eng' },
-    { campaign: 'Infrastructure Engineers', qualified: 1, name: 'Roelant Wondergem', company: 'DHL Express', seniority: 'Senior Director' },
-    { campaign: 'Infrastructure Engineers', qualified: 1, name: 'Kane Edupuganti', company: 'Cox Automotive Inc.', seniority: 'Team Lead' },
-    { campaign: 'Infrastructure Engineers', qualified: 1, name: 'Keith Carter', company: 'Hive Financial Systems', seniority: 'Senior DevOps' },
-    { campaign: 'Infrastructure Engineers', qualified: 1, name: 'David Haastrup', seniority: 'Specialist', company: 'Takem Inc.' },
-];
+// --- Components ---
 
-const COLORS = ['#10b981', '#cbd5e1'];
+const KPICard = ({ title, value, subtext, icon: Icon, colorClass }) => (
+    <div className="bg-white rounded-xl shadow-sm p-6 border border-slate-100 flex items-start justify-between hover:shadow-md transition-shadow">
+        <div>
+            <p className="text-sm font-medium text-slate-500 mb-1">{title}</p>
+            <h3 className="text-2xl font-bold text-slate-800">{value}</h3>
+            {subtext && <p className="text-xs text-slate-400 mt-1">{subtext}</p>}
+        </div>
+        <div className={`p-3 rounded-lg ${colorClass} bg-opacity-10`}>
+            <Icon className={`w-6 h-6 ${colorClass.replace('bg-', 'text-')}`} />
+        </div>
+    </div>
+);
 
-const TrioLeads = () => {
-    const today = "18/12/2025";
-    const totalLeads = 91;
-    const qualifiedLeads = 31;
-    const unqualifiedLeads = 60;
-    const conversionRate = 34.1;
+const SegmentSelector = ({ selected, onSelect }) => (
+    <div className="flex flex-wrap gap-2 mb-6">
+        {Object.keys(reportData).map((segment) => (
+            <button
+                key={segment}
+                onClick={() => onSelect(segment)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selected === segment
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                    }`}
+            >
+                {segment}
+            </button>
+        ))}
+    </div>
+);
 
-    const campaignStats = useMemo(() => [
-        { name: 'Embedded Software', Qualified: 18, Unqualified: 19 },
-        { name: 'Network Engineers', Qualified: 8, Unqualified: 22 },
-        { name: 'Infrastructure Eng.', Qualified: 5, Unqualified: 19 }
-    ], []);
-
-    const pieData = [
-        { name: 'Qualified (1)', value: qualifiedLeads },
-        { name: 'Unqualified (0)', value: unqualifiedLeads }
-    ];
+const ComparisonChart = ({ data }) => {
+    const chartData = Object.keys(data).map(key => ({
+        name: key,
+        Impressions: data[key].impressions,
+        Clicks: data[key].clicks,
+        Leads: data[key].leads * 10 // Scale leads for visibility
+    }));
 
     return (
-        <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-12">
-            <header className="bg-white border-b border-slate-200 px-8 py-5 sticky top-0 z-50 shadow-sm">
-                <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
-                    <div>
-                        <div className="flex items-center gap-2 mb-1">
-                            <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded tracking-widest uppercase">LinkedIn Campaign</span>
-                            <h1 className="text-xl font-bold text-slate-800 tracking-tight">TrioLeads Intelligence</h1>
-                        </div>
-                        <div className="flex items-center gap-2 text-slate-500 text-xs font-medium">
-                            <Calendar size={14} />
-                            <span>Final Report: {today}</span>
-                        </div>
-                    </div>
-                    <div className="flex items-center gap-4">
-                        <Link to="/" className="flex items-center space-x-2 text-slate-500 hover:text-indigo-600 transition-colors text-sm font-semibold">
-                            <LayoutDashboard size={16} />
-                            <span>Dashboard</span>
-                        </Link>
-                        <Link to="/mql" className="flex items-center space-x-2 text-slate-500 hover:text-indigo-600 transition-colors text-sm font-semibold mr-4">
-                            <Activity size={16} />
-                            <span>MQL Report</span>
-                        </Link>
-
-                        <div className="hidden lg:block text-right border-l pl-6 border-slate-200">
-                            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Targeting Context</p>
-                            <p className="text-sm font-black text-slate-800 tracking-tighter">JOB TITLE ONLY</p>
-                        </div>
-                        <span className="bg-emerald-100 text-emerald-700 px-4 py-2 rounded-xl text-sm font-bold flex items-center gap-2 border border-emerald-200">
-                            <TrendingUp size={16} /> {conversionRate}% Quality Rate
-                        </span>
-                    </div>
-                </div>
-            </header>
-
-            <main className="max-w-7xl mx-auto px-8 py-8">
-
-                {/* CEO STRATEGIC SUMMARY PANEL */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div className="lg:col-span-2 bg-gradient-to-br from-slate-900 to-indigo-950 rounded-3xl p-8 text-white shadow-xl relative overflow-hidden border border-slate-800">
-                        <div className="absolute -right-10 -bottom-10 opacity-10">
-                            <Activity size={240} />
-                        </div>
-                        <div className="relative z-10">
-                            <h2 className="text-2xl font-bold mb-6 flex items-center gap-2 text-emerald-400">
-                                <Target size={28} />
-                                Strategic Insight Summary
-                            </h2>
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                                <div className="bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-md">
-                                    <h4 className="text-blue-400 font-bold text-xs mb-1 uppercase tracking-widest">Inbound Authority</h4>
-                                    <p className="text-sm text-slate-300 leading-relaxed">
-                                        By focusing on <strong>Job Title</strong>, we attracted elite active practitioners. 100% of MQLs are currently employed at high-tier technical organizations.
-                                    </p>
-                                </div>
-                                <div className="bg-white/5 p-4 rounded-2xl border border-white/10 backdrop-blur-md">
-                                    <h4 className="text-emerald-400 font-bold text-xs mb-1 uppercase tracking-widest">Industry Density</h4>
-                                    <p className="text-sm text-slate-300 leading-relaxed">
-                                        Qualified leads are manual-vetted from <strong>Global Leaders</strong> (Meta, ASML, DHL, GE). Our brand is successfully poaching from the best.
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col group">
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="p-2 bg-purple-50 text-purple-600 rounded-lg group-hover:bg-purple-600 group-hover:text-white transition-all">
-                                <Medal size={20} />
-                            </div>
-                            <h3 className="font-bold text-slate-800">Elite Credentials</h3>
-                        </div>
-                        <p className="text-sm text-slate-500 flex-grow leading-relaxed font-medium">
-                            Targeted Job Titles yielded <strong>CCIE Architects, ISO 26262 Leads, and PhDs</strong>. This confirms our Title-First strategy filters for technical "Top 1%."
-                        </p>
-                    </div>
-
-                    <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 flex flex-col group">
-                        <div className="flex items-center gap-2 mb-4">
-                            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-lg group-hover:bg-emerald-600 group-hover:text-white transition-all">
-                                <Globe size={20} />
-                            </div>
-                            <h3 className="font-bold text-slate-800">Global Validation</h3>
-                        </div>
-                        <p className="text-sm text-slate-500 flex-grow leading-relaxed font-medium">
-                            Outreach worked seamlessly across <strong>US, EU, and Israel</strong> labor markets. The technical titles used are globally standardized assets.
-                        </p>
-                    </div>
-                </div>
-
-                {/* CAMPAIGN SPECIFIC INTELLIGENCE - NEW SECTION */}
-                <h3 className="text-sm font-black text-slate-400 uppercase tracking-[0.2em] mb-4 pl-2">Segment Deep-Dive</h3>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                    {/* Embedded Insights */}
-                    <div className="bg-white border-l-4 border-blue-500 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="p-2 bg-blue-50 text-blue-600 rounded-xl"><Code size={20} /></div>
-                            <h4 className="font-black text-slate-800 uppercase text-xs tracking-wider">Embedded Software</h4>
-                        </div>
-                        <ul className="space-y-3">
-                            <li className="flex gap-2 text-xs leading-relaxed text-slate-600">
-                                <span className="text-blue-500 font-bold tracking-tighter">01.</span>
-                                <span><strong>Sector Validation:</strong> Highest conversion in <strong>Med-Tech and Aerospace</strong> (SICK, Boston Scientific, GE). High barriers to entry.</span>
-                            </li>
-                            <li className="flex gap-2 text-xs leading-relaxed text-slate-600">
-                                <span className="text-blue-500 font-bold tracking-tighter">02.</span>
-                                <span><strong>MQL Profile:</strong> Attracted specialized <strong>Firmware and Safety</strong> engineers. High-value IP territory.</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Network Insights */}
-                    <div className="bg-white border-l-4 border-emerald-500 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="p-2 bg-emerald-50 text-emerald-600 rounded-xl"><Network size={20} /></div>
-                            <h4 className="font-black text-slate-800 uppercase text-xs tracking-wider">Network Engineers</h4>
-                        </div>
-                        <ul className="space-y-3">
-                            <li className="flex gap-2 text-xs leading-relaxed text-slate-600">
-                                <span className="text-emerald-500 font-bold tracking-tighter">01.</span>
-                                <span><strong>Enterprise Focus:</strong> Messaging resonates with <strong>Hyperscalers</strong> (Meta, Nokia, Hyundai). </span>
-                            </li>
-                            <li className="flex gap-2 text-xs leading-relaxed text-slate-600">
-                                <span className="text-emerald-500 font-bold tracking-tighter">02.</span>
-                                <span><strong>The "0" Factor:</strong> High disqualification volume due to <strong>SME/Freelance</strong> overlap. Requires stricter company size filters.</span>
-                            </li>
-                        </ul>
-                    </div>
-
-                    {/* Infrastructure Insights */}
-                    <div className="bg-white border-l-4 border-indigo-500 p-6 rounded-2xl shadow-sm hover:shadow-md transition-shadow">
-                        <div className="flex items-center gap-3 mb-4">
-                            <div className="p-2 bg-indigo-50 text-indigo-600 rounded-xl"><Server size={20} /></div>
-                            <h4 className="font-black text-slate-800 uppercase text-xs tracking-wider">Infrastructure Eng.</h4>
-                        </div>
-                        <ul className="space-y-3">
-                            <li className="flex gap-2 text-xs leading-relaxed text-slate-600">
-                                <span className="text-indigo-500 font-bold tracking-tighter">01.</span>
-                                <span><strong>Seniority Yield:</strong> Fewer leads but higher rank. Secured <strong>Senior Directors (DHL)</strong> and Team Leads.</span>
-                            </li>
-                            <li className="flex gap-2 text-xs leading-relaxed text-slate-600">
-                                <span className="text-indigo-500 font-bold tracking-tighter">02.</span>
-                                <span><strong>Strategic Skillset:</strong> High validation for <strong>Cloud & DevOps</strong> roles within legacy Logistics/Finance giants.</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                {/* Charts & Table Row */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-                    <div className="lg:col-span-2 bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
-                        <div className="flex items-center justify-between mb-8">
-                            <div>
-                                <h3 className="text-lg font-bold text-slate-800">Recruitment Funnel Efficiency</h3>
-                                <p className="text-xs text-slate-400 font-bold uppercase tracking-widest mt-1">Status 1 (Qualified) vs. Status 0 (Discarded)</p>
-                            </div>
-                            <div className="flex gap-4">
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500"></div>
-                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Qualified</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-2.5 h-2.5 rounded-full bg-slate-200"></div>
-                                    <span className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">Discarded</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="h-[280px]">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={campaignStats} margin={{ top: 0, right: 0, left: -20, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
-                                    <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 700 }} />
-                                    <YAxis axisLine={false} tickLine={false} tick={{ fill: '#94a3b8', fontSize: 11 }} />
-                                    <Tooltip
-                                        cursor={{ fill: '#f8fafc' }}
-                                        contentStyle={{ borderRadius: '16px', border: 'none', boxShadow: '0 20px 25px -5px rgb(0 0 0 / 0.1)' }}
-                                    />
-                                    <Bar dataKey="Qualified" fill="#10b981" radius={[4, 4, 0, 0]} barSize={40} />
-                                    <Bar dataKey="Unqualified" fill="#e2e8f0" radius={[4, 4, 0, 0]} barSize={40} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
-
-                    <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 flex flex-col">
-                        <h3 className="text-lg font-bold text-slate-800 mb-1">MQL Concentration</h3>
-                        <p className="text-[10px] font-extrabold text-slate-400 uppercase tracking-widest mb-6">31 MQLs / 91 Records</p>
-                        <div className="flex-grow flex items-center justify-center relative">
-                            <ResponsiveContainer width="100%" height={220}>
-                                <PieChart>
-                                    <Pie
-                                        data={pieData}
-                                        cx="50%"
-                                        cy="50%"
-                                        innerRadius={70}
-                                        outerRadius={95}
-                                        paddingAngle={10}
-                                        dataKey="value"
-                                    >
-                                        {pieData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={COLORS[index]} stroke="none" />
-                                        ))}
-                                    </Pie>
-                                    <Tooltip />
-                                </PieChart>
-                            </ResponsiveContainer>
-                            <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                                <span className="text-4xl font-black text-slate-800 tracking-tighter">31</span>
-                                <span className="text-[10px] font-bold text-emerald-500 uppercase tracking-widest">Success (1)</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Detailed Strategic Registry */}
-                <div className="bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden">
-                    <div className="px-8 py-6 border-b border-slate-100 flex items-center justify-between bg-slate-50/30">
-                        <h3 className="text-sm font-black text-slate-800 uppercase tracking-widest">Verified MQL Registry</h3>
-                        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest italic">Confidential Report</span>
-                    </div>
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left">
-                            <thead>
-                                <tr className="border-b border-slate-50">
-                                    <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Decision Maker</th>
-                                    <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Strategic Account</th>
-                                    <th className="px-8 py-4 text-[10px] font-black text-slate-400 uppercase tracking-widest">Technical Domain</th>
-                                    <th className="px-8 py-4 text-right pr-12 text-[10px] font-black text-slate-400 uppercase tracking-widest">MQL Status</th>
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-50">
-                                {rawData.filter(l => l.qualified).slice(0, 12).map((lead, i) => (
-                                    <tr key={i} className="hover:bg-slate-50/80 transition-all cursor-default group">
-                                        <td className="px-8 py-4">
-                                            <div className="flex items-center gap-3">
-                                                <div className="w-8 h-8 rounded-lg bg-slate-900 text-white flex items-center justify-center text-[10px] font-bold group-hover:bg-blue-600">
-                                                    {lead.name.split(' ').map(n => n[0]).join('')}
-                                                </div>
-                                                <p className="text-xs font-bold text-slate-800">{lead.name}</p>
-                                            </div>
-                                        </td>
-                                        <td className="px-8 py-4">
-                                            <div className="flex items-center gap-2">
-                                                <Building2 size={12} className="text-slate-300" />
-                                                <span className="text-xs font-semibold text-slate-600">{lead.company}</span>
-                                            </div>
-                                        </td>
-                                        <td className="px-8 py-4">
-                                            <span className="text-[9px] bg-slate-100 text-slate-500 px-2 py-0.5 rounded font-black uppercase tracking-tight">
-                                                {lead.campaign}
-                                            </span>
-                                        </td>
-                                        <td className="px-8 py-4 text-right pr-12">
-                                            <span className="text-[9px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-black uppercase tracking-tighter ring-1 ring-emerald-200">Qualified</span>
-                                        </td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-            </main>
-
-            <footer className="max-w-7xl mx-auto px-8 py-8 border-t border-slate-200 text-center">
-                <p className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.2em]">LinkedIn Campaign Intelligence • {today} • Proprietary Data</p>
-            </footer>
+        <div className="h-80 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                    <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                    <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                    <Tooltip
+                        cursor={{ fill: '#f1f5f9' }}
+                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                    />
+                    <Legend />
+                    <Bar dataKey="Impressions" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="Clicks" fill="#10B981" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="Leads" name="Leads (x10)" fill="#F59E0B" radius={[4, 4, 0, 0]} />
+                </BarChart>
+            </ResponsiveContainer>
         </div>
     );
 };
 
-export default TrioLeads;
+const GeoPerformanceChart = ({ data }) => (
+    <div className="h-80 w-full">
+        <ResponsiveContainer width="100%" height="100%">
+            <BarChart layout="vertical" data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#e2e8f0" />
+                <XAxis type="number" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis dataKey="name" type="category" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} width={100} />
+                <Tooltip
+                    cursor={{ fill: '#f1f5f9' }}
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                />
+                <Legend />
+                <Bar dataKey="impressions" name="Impressions" fill="#6366f1" radius={[0, 4, 4, 0]} barSize={20} />
+                <Bar dataKey="clicks" name="Clicks" fill="#8b5cf6" radius={[0, 4, 4, 0]} barSize={20} />
+            </BarChart>
+        </ResponsiveContainer>
+    </div>
+);
+
+export default function TrioLeads() {
+    const [selectedSegment, setSelectedSegment] = useState("Embedded Software");
+
+    // Calculate Aggregates for Overview
+    const totalSpent = Object.values(reportData).reduce((acc, curr) => acc + curr.spent, 0);
+    const totalImpressions = Object.values(reportData).reduce((acc, curr) => acc + curr.impressions, 0);
+    const totalLeads = Object.values(reportData).reduce((acc, curr) => acc + curr.leads, 0);
+    const avgCPL = totalSpent / totalLeads;
+
+    const currentData = reportData[selectedSegment];
+
+    return (
+        <div className="min-h-screen bg-slate-50 font-sans text-slate-800 p-4 md:p-8">
+            {/* Header */}
+            <div className="max-w-7xl mx-auto mb-8">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-3xl font-bold text-slate-900">LOCI Audience Report</h1>
+                        <p className="text-slate-500 mt-1">Campaign Performance Dashboard</p>
+                    </div>
+                    <div className="flex gap-3 items-center">
+                        <div className="flex items-center gap-4 mr-4">
+                            <Link to="/" className="flex items-center space-x-2 text-slate-500 hover:text-indigo-600 transition-colors text-sm font-semibold">
+                                <LayoutDashboard size={16} />
+                                <span>Dashboard</span>
+                            </Link>
+                            <Link to="/mql" className="flex items-center space-x-2 text-slate-500 hover:text-indigo-600 transition-colors text-sm font-semibold">
+                                <Activity size={16} />
+                                <span>MQL Report</span>
+                            </Link>
+                        </div>
+                        <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200 text-sm">
+                            <span className="text-slate-500">Date Range:</span> <span className="font-semibold">Campaign Duration</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto grid gap-8">
+
+                {/* Aggregate KPIs Row */}
+                <section>
+                    <h2 className="text-lg font-semibold text-slate-700 mb-4 flex items-center gap-2">
+                        <Activity className="w-5 h-5" /> Overall Performance
+                    </h2>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <KPICard
+                            title="Total Spent"
+                            value={`$${totalSpent.toLocaleString()}`}
+                            subtext="Across all segments"
+                            icon={DollarSign}
+                            colorClass="bg-blue-500 text-blue-600"
+                        />
+                        <KPICard
+                            title="Total Impressions"
+                            value={totalImpressions.toLocaleString()}
+                            subtext="Total visibility"
+                            icon={Globe}
+                            colorClass="bg-emerald-500 text-emerald-600"
+                        />
+                        <KPICard
+                            title="Total Leads"
+                            value={totalLeads}
+                            subtext="Conversions generated"
+                            icon={Target}
+                            colorClass="bg-amber-500 text-amber-600"
+                        />
+                        <KPICard
+                            title="Average CPL"
+                            value={`$${avgCPL.toFixed(2)}`}
+                            subtext="Cost Per Lead"
+                            icon={Award}
+                            colorClass="bg-indigo-500 text-indigo-600"
+                        />
+                    </div>
+                </section>
+
+                {/* Main Content Area */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                    {/* Left Column: Interactive Detail View */}
+                    <div className="lg:col-span-2 space-y-8">
+
+                        {/* Chart: Comparative Overview */}
+                        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                            <h3 className="text-lg font-semibold mb-6">Segment Comparison</h3>
+                            <ComparisonChart data={reportData} />
+                        </div>
+
+                        {/* Segment Deep Dive */}
+                        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                                <h3 className="text-lg font-semibold flex items-center gap-2">
+                                    <Filter className="w-5 h-5 text-slate-400" /> Segment Details
+                                </h3>
+                                <SegmentSelector selected={selectedSegment} onSelect={setSelectedSegment} />
+                            </div>
+
+                            {/* Selected Segment KPIs */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                                <div className="p-4 bg-slate-50 rounded-lg">
+                                    <p className="text-xs text-slate-500 uppercase font-semibold">Audience Size</p>
+                                    <p className="text-xl font-bold text-slate-800">{currentData.audienceSize.toLocaleString()}</p>
+                                </div>
+                                <div className="p-4 bg-slate-50 rounded-lg">
+                                    <p className="text-xs text-slate-500 uppercase font-semibold">CTR</p>
+                                    <p className="text-xl font-bold text-slate-800">{(currentData.ctr * 100).toFixed(2)}%</p>
+                                </div>
+                                <div className="p-4 bg-slate-50 rounded-lg">
+                                    <p className="text-xs text-slate-500 uppercase font-semibold">Reach</p>
+                                    <p className="text-xl font-bold text-slate-800">{currentData.reach.toLocaleString()}</p>
+                                </div>
+                                <div className="p-4 bg-slate-50 rounded-lg">
+                                    <p className="text-xs text-slate-500 uppercase font-semibold">CPL</p>
+                                    <p className="text-xl font-bold text-slate-800">${currentData.cpl}</p>
+                                </div>
+                            </div>
+
+                            {/* Geo Chart */}
+                            <h4 className="text-md font-medium text-slate-600 mb-4">Performance by Geography</h4>
+                            <GeoPerformanceChart data={currentData.geoData} />
+
+                            {/* Geo Table */}
+                            <div className="mt-8 overflow-x-auto">
+                                <table className="w-full text-sm text-left">
+                                    <thead className="text-xs text-slate-500 uppercase bg-slate-50">
+                                        <tr>
+                                            <th className="px-4 py-3 rounded-l-lg">Country</th>
+                                            <th className="px-4 py-3">Impressions</th>
+                                            <th className="px-4 py-3">Clicks</th>
+                                            <th className="px-4 py-3 rounded-r-lg">Leads</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {currentData.geoData.map((geo, idx) => (
+                                            <tr key={idx} className="border-b border-slate-100 last:border-0 hover:bg-slate-50">
+                                                <td className="px-4 py-3 font-medium text-slate-700">{geo.name}</td>
+                                                <td className="px-4 py-3">{geo.impressions.toLocaleString()}</td>
+                                                <td className="px-4 py-3">{geo.clicks}</td>
+                                                <td className="px-4 py-3 text-indigo-600 font-semibold">{geo.leads}</td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {/* Right Column: Targeting Info & Insights */}
+                    <div className="space-y-8">
+
+                        {/* Audience Targeting Card */}
+                        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-100">
+                            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <Briefcase className="w-5 h-5 text-slate-500" /> Job Titles Targeted
+                            </h3>
+                            <p className="text-sm text-slate-500 mb-4">
+                                Primary job titles included in the <strong>{selectedSegment}</strong> audience segment:
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                                {currentData.jobTitles.map((title, idx) => (
+                                    <span key={idx} className="px-3 py-1 bg-slate-100 text-slate-700 text-xs rounded-full border border-slate-200">
+                                        {title}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Quick Insights */}
+                        <div className="bg-indigo-900 p-6 rounded-xl shadow-lg text-white">
+                            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <TrendingUp className="w-5 h-5 text-indigo-300" /> Key Insights
+                            </h3>
+                            <ul className="space-y-4 text-sm text-indigo-100">
+                                <li className="flex gap-3">
+                                    <span className="bg-indigo-700 w-6 h-6 flex items-center justify-center rounded-full shrink-0 text-xs font-bold">1</span>
+                                    <p><strong>Network Engineers</strong> represent the largest audience pool ({reportData["Network Engineer"].audienceSize.toLocaleString()}) but have a lower CTR compared to Embedded Engineers.</p>
+                                </li>
+                                <li className="flex gap-3">
+                                    <span className="bg-indigo-700 w-6 h-6 flex items-center justify-center rounded-full shrink-0 text-xs font-bold">2</span>
+                                    <p><strong>Embedded Software</strong> campaigns are the most efficient in terms of engagement, boasting the highest CTR ({reportData["Embedded Software"].ctr * 100}%) across all segments.</p>
+                                </li>
+                                <li className="flex gap-3">
+                                    <span className="bg-indigo-700 w-6 h-6 flex items-center justify-center rounded-full shrink-0 text-xs font-bold">3</span>
+                                    <p><strong>United States</strong> is consistently the top-performing geography for impressions and clicks across all three engineering disciplines.</p>
+                                </li>
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
