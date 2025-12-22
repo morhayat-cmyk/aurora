@@ -90,6 +90,10 @@ const MQL = () => {
                             <LayoutDashboard size={16} />
                             <span>Dashboard</span>
                         </Link>
+                        <Link to="/lead-intelligence" className="flex items-center space-x-2 text-slate-500 hover:text-indigo-600 transition-colors text-sm font-semibold mr-4">
+                            <Activity size={16} />
+                            <span>Lead Intelligence</span>
+                        </Link>
                         <Link to="/trio-leads" className="flex items-center space-x-2 text-slate-500 hover:text-indigo-600 transition-colors text-sm font-semibold mr-4">
                             <PieChartIcon size={16} />
                             <span>Trio Leads</span>

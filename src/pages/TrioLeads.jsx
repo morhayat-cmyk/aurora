@@ -209,6 +209,10 @@ export default function TrioLeads() {
                                 <Activity size={16} />
                                 <span>MQL Report</span>
                             </Link>
+                            <Link to="/lead-intelligence" className="flex items-center space-x-2 text-slate-500 hover:text-indigo-600 transition-colors text-sm font-semibold ml-4">
+                                <Activity size={16} />
+                                <span>Lead Intelligence</span>
+                            </Link>
                         </div>
                         <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200 text-sm">
                             <span className="text-slate-500">Date Range:</span> <span className="font-semibold">Campaign Duration</span>
