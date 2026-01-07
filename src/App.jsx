@@ -4,6 +4,7 @@ import Dashboard from './pages/Dashboard';
 import MQL from './pages/MQL';
 import TrioLeads from './pages/TrioLeads';
 import LeadIntelligence from './pages/LeadIntelligence';
+import DecemberOverview from './pages/DecemberOverview';
 
 // Main App component that operates as a Router
 export default function App() {
@@ -14,6 +15,7 @@ export default function App() {
         <Route path="/mql" element={<MQL />} />
         <Route path="/trio-leads" element={<TrioLeads />} />
         <Route path="/lead-intelligence" element={<LeadIntelligence />} />
+        <Route path="/december-overview" element={<DecemberOverview />} />
       </Routes>
     </Router>
   );
