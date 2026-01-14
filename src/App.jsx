@@ -6,6 +6,7 @@ import TrioLeads from './pages/TrioLeads';
 import LeadIntelligence from './pages/LeadIntelligence';
 import DecemberOverview from './pages/DecemberOverview';
 import January7_11Leads from './pages/January7_11Leads';
+import EmbeddedLeads from './pages/EmbeddedLeads';
 
 // Main App component that operates as a Router
 export default function App() {
@@ -18,6 +19,7 @@ export default function App() {
         <Route path="/lead-intelligence" element={<LeadIntelligence />} />
         <Route path="/december-overview" element={<DecemberOverview />} />
         <Route path="/january-7-11-leads" element={<January7_11Leads />} />
+        <Route path="/embedded-leads" element={<EmbeddedLeads />} />
       </Routes>
     </Router>
   );
