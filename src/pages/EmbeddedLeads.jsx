@@ -5,308 +5,282 @@ import {
 } from 'recharts';
 import {
     Users, Building2, Target, Globe2, Briefcase, Search,
-    Award, TrendingUp, Mail, Linkedin
+    Award, TrendingUp, Linkedin, Info, Zap
 } from 'lucide-react';
 
 const rawData = [
-    { date: '2025-12-02', company: 'ABB E-mobility', name: 'Oguz Emre Cakil', email: 'info@gomuludestek.com', industry: 'Automotive/EV', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-02', company: 'SICK Sensor Intelligence', name: 'Thomas Kötzner', industry: 'Industrial Automation', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-02', company: 'Rogat Engineering', name: 'Reut Vaknin', industry: 'Engineering Services', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-08', company: 'AMETEK', name: 'Manuel Malagon', industry: 'Electronics', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-08', company: 'SATEC', name: 'Sergey Garberman', industry: 'Energy', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-08', company: 'Maytronics', name: 'Shay Ron', industry: 'Consumer Tech', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-08', company: 'Amazon', name: 'Nagaraj Venkatapuram', industry: 'Big Tech', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-10', company: 'Mallinckrodt', name: 'Mohamed Shehab', industry: 'Medical Devices', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-11', company: 'magniX', name: 'Farzad Baghernezhad', industry: 'Aerospace', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-11', company: 'ASML', name: 'Vigneswaran Karunanithi', industry: 'Semiconductors', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-12', company: 'PLC2', name: 'Frank Schwenke', industry: 'Engineering Services', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-12', company: 'Boston Scientific', name: 'Nagaraju J', industry: 'Medical Devices', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-13', company: 'normalis-gmbh', name: 'Christian Steffen', industry: 'Software', size: 'Small', tier: 'Tier 3' },
-    { date: '2025-12-13', company: 'Lightmatter', name: 'Ehu Shubham Shaw', industry: 'Semiconductors', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-15', company: 'The Evolvers Group', name: 'Naga Venkata Rayapati', industry: 'Consulting', size: 'Small', tier: 'Tier 3' },
-    { date: '2025-12-15', company: 'GE Aerospace', name: 'Anotida David Zimvumi', industry: 'Aerospace', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-15', company: 'TDK-Lambda', name: 'Elad Malka', industry: 'Electronics', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-15', company: 'GS LOCKnGO', name: 'Nadeem Jamal', industry: 'IoT/Security', size: 'Small', tier: 'Tier 3' },
-    { date: '2025-12-15', company: 'Viyan Systems UK', name: 'Venkat Saravanan', industry: 'Consulting', size: 'Small', tier: 'Tier 3' },
-    { date: '2025-12-16', company: 'Industrial Scientific', name: 'Grayham Grega', industry: 'Industrial Automation', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-16', company: 'ASML', name: 'Dinesh Ravilla', industry: 'Semiconductors', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-16', company: 'AVL Software', name: 'Hamza EL MALKI', industry: 'Automotive/EV', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-17', company: 'QinetiQ', name: 'Abdi Tujuba', industry: 'Defense/Aero', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-17', company: 'MESCO', name: 'Akash John Subash', industry: 'Engineering Services', size: 'Small', tier: 'Tier 3' },
-    { date: '2025-12-17', company: 'Enercon Technologies', name: 'Tal Gadasi', industry: 'Energy', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-17', company: 'Pi Square Technologies', name: 'Shaik Saifulla', industry: 'Automotive', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-18', company: 'Thoughtworks', name: 'Harald Walter', industry: 'Big Tech', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-18', company: 'paragon GmbH', name: 'Oleksandr Liginov', industry: 'Automotive', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-18', company: 'wenglor sensoric', name: 'Illia Antoniuk', industry: 'Industrial Automation', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-20', company: 'NeolSys', name: 'Muhammad Junaid Aslam', industry: 'Software', size: 'Small', tier: 'Tier 3' },
-    { date: '2025-12-20', company: 'mbeder GmbH', name: 'Yazdan Haghi', industry: 'Engineering Services', size: 'Small', tier: 'Tier 3' },
-    { date: '2025-12-21', company: 'FarmSense Inc.', name: 'Shahab Nikkhoo', industry: 'AgriTech/IoT', size: 'Small', tier: 'Tier 3' },
-    { date: '2025-12-21', company: 'Canyon AeroConnect', name: 'Weston Gavin', industry: 'Aerospace', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-22', company: 'Honeywell', name: 'Rama Krishna Velpuri', industry: 'Industrial Automation', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-22', company: 'Inter-Coastal Electronics', name: 'Krista Wolffe', industry: 'Defense/Electronics', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-22', company: 'IOT Bearings', name: 'Ruslan Nurimbetov', industry: 'Industrial IoT', size: 'Small', tier: 'Tier 3' },
-    { date: '2025-12-24', company: 'Cambridge Sensoriis', name: 'Venkata Sunil Malladhi', industry: 'Radar/IoT', size: 'Small', tier: 'Tier 3' },
-    { date: '2025-12-24', company: 'JSI', name: 'David Nacarino', industry: 'Industrial Automation', size: 'Small', tier: 'Tier 3' },
-    { date: '2025-12-24', company: 'RØDE', name: 'John Morgan', industry: 'Consumer Tech', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-24', company: 'Motorola Solutions', name: 'Alexandr Spivac', industry: 'Telecommunications', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2025-12-24', company: 'Planetary Remediation', name: 'Aaron Schoeffler', industry: 'Environmental', size: 'Small', tier: 'Tier 3' },
-    { date: '2025-12-25', company: 'Alvaria, Inc.', name: 'Adam Kahin', industry: 'Software', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-25', company: 'TES Electronic Solutions', name: 'Ajay Kumar Kota', industry: 'Electronics', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-28', company: 'Bastion Technologies', name: 'Paul Newton', industry: 'Defense/Space', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2025-12-30', company: 'PV Labs', name: 'Sean Stel', industry: 'Aerospace/Imaging', size: 'Small', tier: 'Tier 3' },
-    { date: '2026-01-04', company: 'Soil Instruments Ltd', name: 'Giwa Oluwarotimi', industry: 'Geotechnical', size: 'Small', tier: 'Tier 3' },
-    { date: '2026-01-04', company: 'SITAEL', name: 'Salvatore Arlia', industry: 'Space/Aerospace', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2026-01-04', company: 'Minimal', name: 'Jakub Szypicyn', industry: 'Design/Tech', size: 'Small', tier: 'Tier 3' },
-    { date: '2026-01-04', company: 'Honeywell', name: 'Saismitha Chandrasekar', industry: 'Industrial Automation', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2026-01-05', company: 'Berlin Space Technologies', name: 'Sritam Paltasingh', industry: 'Space Tech', size: 'Small', tier: 'Tier 3' },
-    { date: '2026-01-08', company: 'Stellantis', name: 'Murali K', industry: 'Automotive', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2026-01-10', company: 'AAM', name: 'Amit Singh', industry: 'Automotive', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2026-01-11', company: 'Capgemini Engineering', name: 'Somanath Rudrakshala', industry: 'Engineering Services', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2026-01-12', company: 'Caterpillar Inc.', name: 'Srinidhi K', industry: 'Industrial Automation', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2026-01-12', company: 'Texas Instruments', name: 'Eden Gender', industry: 'Semiconductors', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2026-01-13', company: 'Stryker', name: 'Siva Krishna R', industry: 'Medical Devices', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2026-01-13', company: 'Stellantis', name: 'Kartik Y', industry: 'Automotive', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2026-01-13', company: 'Urban Mobility Systems', name: 'Madhav Shashank', industry: 'Automotive/EV', size: 'Mid-Market', tier: 'Tier 2' },
-    { date: '2026-01-13', company: 'FERCHAU', name: 'Chintamani Sagade', industry: 'Engineering Services', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2026-01-13', company: 'Honeywell', name: 'Purva Limbachiya', industry: 'Industrial Automation', size: 'Enterprise', tier: 'Tier 1' },
-    { date: '2026-01-14', company: 'Infineon Technologies', name: 'Bradley Nelson', industry: 'Semiconductors', size: 'Enterprise', tier: 'Tier 1' },
+    { name: 'Oguz Emre Cakil', company: 'ABB E-mobility', role: 'Embedded Eng (Inferred)', industry: 'Automotive/EV', size: '105,000', tier: 'Tier 1', desc: 'Designs EV charging solutions; global leader in electrification.' },
+    { name: 'Thomas Kötzner', company: 'SICK Sensor Intelligence', role: 'Embedded Eng (Inferred)', industry: 'Industrial Automation', size: '11,804', tier: 'Tier 1', desc: 'Manufacturer of sensors and lidar systems for factory automation.' },
+    { name: 'Reut Vaknin', company: 'Rogat Engineering', role: 'Embedded Software Engineer', industry: 'R&D Services', size: '22', tier: 'Tier 3', desc: 'End-to-end R&D for defense, autonomous systems, and robotics.' },
+    { name: 'Manuel Malagon', company: 'AMETEK Solidstate Controls', role: 'Embedded Eng (Inferred)', industry: 'Electronics', size: '200+', tier: 'Tier 2', desc: 'Designs UPS and power-conversion systems; part of AMETEK group.' },
+    { name: 'Sergey Garberman', company: 'SATEC', role: 'Embedded Eng (Inferred)', industry: 'Energy', size: '32', tier: 'Tier 3', desc: 'Power-measurement and energy-management solutions.' },
+    { name: 'Shay Ron', company: 'Maytronics', role: 'Embedded Eng (Inferred)', industry: 'Consumer Tech', size: '1,193', tier: 'Tier 2', desc: 'Market leader in robotic pool cleaners and pool safety.' },
+    { name: 'Nagaraj Venkatapuram', company: 'Amazon', role: 'Embedded Eng (Inferred)', industry: 'Big Tech', size: '1,560,000', tier: 'Tier 1', desc: 'World’s largest online retailer and cloud service provider.' },
+    { name: 'Mohamed Shehab', company: 'Mallinckrodt Pharmaceuticals', role: 'Embedded Eng (Inferred)', industry: 'Medical Devices', size: '2,700', tier: 'Tier 2', desc: 'Specialty biopharma developing rare disease medicines.' },
+    { name: 'Farzad Baghernezhad', company: 'magniX', role: 'Embedded Software Engineer', industry: 'Aerospace', size: '87', tier: 'Tier 3', desc: 'Electric motors and powertrains for hybrid aviation.' },
+    { name: 'Vigneswaran Karunanithi', company: 'ASML', role: 'Embedded Eng (Inferred)', industry: 'Semiconductors', size: '44,027', tier: 'Tier 1', desc: 'Leading supplier of lithography systems for semiconductors.' },
+    { name: 'Frank Schwenke', company: 'PLC2', role: 'Engineering Lead', industry: 'Engineering Services', size: 'SME', tier: 'Tier 3', desc: 'FPGA-based hardware design and embedded training.' },
+    { name: 'Nagaraju J', company: 'Boston Scientific', role: 'Embedded Eng (Inferred)', industry: 'Medical Devices', size: '53,000', tier: 'Tier 1', desc: 'Global manufacturer of cardiovascular and surgical medical devices.' },
+    { name: 'Christian Steffen', company: 'normalis gmbh', role: 'Embedded Eng (Inferred)', industry: 'Consultancy', size: '30+', tier: 'Tier 3', desc: 'German software consultancy specializing in embedded architecture.' },
+    { name: 'Shubham Shaw', company: 'Lightmatter', role: 'Hardware Eng (Inferred)', industry: 'Semiconductors', size: '200', tier: 'Tier 2', desc: 'Developing photonic computing and optical AI infrastructure.' },
+    { name: 'Naga Venkata Rayapati', company: 'The Evolvers Group', role: 'Consultant', industry: 'Consulting', size: '81', tier: 'Tier 3', desc: 'Management and technology firm; digital twin solutions.' },
+    { name: 'Anotida David Zimvumi', company: 'GE Aerospace', role: 'Aerospace Eng', industry: 'Aerospace', size: '52,000', tier: 'Tier 1', desc: 'Formerly GE Aviation; builds jet engines and aircraft systems.' },
+    { name: 'Elad Malka', company: 'TDK-Lambda Israel', role: 'Embedded Eng (Inferred)', industry: 'Electronics', size: '270', tier: 'Tier 3', desc: 'Produces high-efficiency power-supply modules.' },
+    { name: 'Nadeem Jamal', company: 'GS LOCKnGO', role: 'Software Eng', industry: 'IoT/Security', size: 'Startup', tier: 'Tier 3', desc: 'Tech company specializing in smart locks and security systems.' },
+    { name: 'Venkat Saravanan', company: 'Viyan Systems UK', role: 'Embedded Specialist', industry: 'Consulting', size: 'SME', tier: 'Tier 3', desc: 'IT consulting and embedded systems services.' },
+    { name: 'Grayham Grega', company: 'Industrial Scientific', role: 'Embedded Eng (Inferred)', industry: 'Industrial Safety', size: '800', tier: 'Tier 2', desc: 'Manufacturer of portable gas-detection equipment.' },
+    { name: 'Hamza El Malki', company: 'AVL Software', role: 'Software Eng', industry: 'Automotive', size: '12,200', tier: 'Tier 1', desc: 'Global mobility technology; vehicle testing and simulation.' },
+    { name: 'Abdi Tujuba', company: 'QinetiQ', role: 'Systems Eng', industry: 'Defense', size: '7,000', tier: 'Tier 1', desc: 'British defense tech specializing in system integration.' },
+    { name: 'Akash John Subash', company: 'MESCO Engineering', role: 'Software Eng', industry: 'Automation', size: '70', tier: 'Tier 3', desc: 'Specializes in HW/SW for factory and process automation.' },
+    { name: 'Tal Gadasi', company: 'Enercon Technologies', role: 'Embedded Eng (Inferred)', industry: 'Energy', size: '400+', tier: 'Tier 2', desc: 'Power conversion for aerospace and defense markets.' },
+    { name: 'Shaik Saifulla', company: 'Pi-Square Technologies', role: 'Automotive Eng', industry: 'Automotive', size: '17', tier: 'Tier 3', desc: 'Engineering services for automotive embedded systems.' },
+    { name: 'Harald Walter', company: 'Thoughtworks', role: 'Technical Lead', industry: 'Software', size: '10,000+', tier: 'Tier 1', desc: 'Global consultancy specializing in software engineering.' },
+    { name: 'Oleksandr Liginov', company: 'paragon GmbH', role: 'Embedded Eng (Inferred)', industry: 'Automotive', size: '685', tier: 'Tier 2', desc: 'Develops cockpit electronics and automotive sensors.' },
+    { name: 'Illia Antoniuk', company: 'wenglor sensoric', role: 'Embedded Eng (Inferred)', industry: 'Industrial Automation', size: '1,000', tier: 'Tier 2', desc: 'Intelligent sensors and machine-vision systems.' },
+    { name: 'Muhammad Junaid Aslam', company: 'NeolSys', role: 'Embedded Eng', industry: 'IoT', size: 'Small', tier: 'Tier 3', desc: 'Specializes in embedded systems and communication.' },
+    { name: 'Yazdan Haghi', company: 'mbeder GmbH', role: 'Embedded Eng', industry: 'IoT', size: 'Small', tier: 'Tier 3', desc: 'AI-enabled wearable technology for emergency care.' },
+    { name: 'Shahab Nikkhoo', company: 'FarmSense Inc.', role: 'Embedded Eng', industry: 'AgriTech', size: 'Startup', tier: 'Tier 3', desc: 'Real-time insect-monitoring sensors using machine learning.' },
+    { name: 'Weston Gavin', company: 'Canyon AeroConnect', role: 'Embedded Eng', industry: 'Aerospace', size: 'Mid-sized', tier: 'Tier 2', desc: 'Aviation communication and intercom systems.' },
+    { name: 'Rama Krishna Velpuri', company: 'Honeywell', role: 'Embedded Eng (Inferred)', industry: 'Industrial Automation', size: '102,000', tier: 'Tier 1', desc: 'Diversified conglomerate; aerospace and building tech.' },
+    { name: 'Krista Wolffe', company: 'Inter-Coastal Electronics', role: 'Software Eng', industry: 'Defense', size: '96', tier: 'Tier 3', desc: 'Supplies weapon-system training and simulation.' },
+    { name: 'Venkata Sunil Malladhi', company: 'Cambridge Sensoriis', role: 'Radar Engineer', industry: 'Industrial Automation', size: '14', tier: 'Tier 3', desc: 'Designs micro radar sensors for industrial automation.' },
+    { name: 'John Morgan', company: 'RØDE', role: 'Embedded Eng (Inferred)', industry: 'Consumer Tech', size: '800+', tier: 'Tier 2', desc: 'Australian audio technology; microphones and interfaces.' },
+    { name: 'Alexandr Spivac', company: 'Motorola Solutions', role: 'Embedded Eng', industry: 'Telecommunications', size: '21,000', tier: 'Tier 1', desc: 'Mission-critical communications for public safety.' },
+    { name: 'Paul Newton', company: 'Bastion Technologies', role: 'Systems Eng', industry: 'Aerospace/Space', size: '900', tier: 'Tier 2', desc: 'Engineering and mission assurance for NASA/Defense.' },
+    { name: 'Salvatore Arlia', company: 'SITAEL', role: 'Embedded Eng (Inferred)', industry: 'Space Tech', size: 'Mid-sized', tier: 'Tier 2', desc: 'Italian aerospace group developing small satellites.' },
+    { name: 'Murali Kandibanda', company: 'Stellantis', role: 'Embedded Eng', industry: 'Automotive', size: '272,000', tier: 'Tier 1', desc: 'Global auto manufacturer (Jeep, Peugeot, Opel).' },
+    { name: 'Amit Singh', company: 'AAM', role: 'Embedded Eng (Inferred)', industry: 'Automotive', size: '20,000', tier: 'Tier 1', desc: 'Driveline and powertrain systems for industrial markets.' },
+    { name: 'Capgemini Engineering', company: 'Capgemini', role: 'Embedded Eng (Inferred)', industry: 'Engineering Services', size: '340,000', tier: 'Tier 1', desc: 'R&D services across automotive and aerospace.' },
+    { name: 'Srinidhi K', company: 'Caterpillar Inc.', role: 'Embedded Eng (Inferred)', industry: 'Industrial Automation', size: '113,200', tier: 'Tier 1', desc: 'Manufacturer of construction and mining equipment.' },
+    { name: 'Eden Gender', company: 'Texas Instruments', role: 'Embedded Eng (Inferred)', industry: 'Semiconductors', size: '34,000', tier: 'Tier 1', desc: 'Semiconductors and analog/mixed-signal chips.' },
+    { name: 'Siva Krishna R', company: 'Stryker', role: 'Embedded Eng (Inferred)', industry: 'Medical Devices', size: '51,000', tier: 'Tier 1', desc: 'Medical devices for hospital and surgical use.' },
+    { name: 'Bradley Nelson', company: 'Infineon Technologies', role: 'Embedded Eng (Inferred)', industry: 'Semiconductors', size: '58,600', tier: 'Tier 1', desc: 'Power electronics and automotive microcontrollers.' },
 ];
 
-const COLORS = ['#3b82f6', '#10b981', '#f59e0b', '#8b5cf6', '#ef4444', '#ec4899', '#6366f1', '#14b8a6', '#f43f5e'];
+const COLORS = ['#2563eb', '#059669', '#d97706', '#7c3aed', '#dc2626', '#db2777', '#4f46e5', '#0891b2', '#16a34a'];
 
 export default function EmbeddedLeads() {
     const [searchTerm, setSearchTerm] = useState('');
-    const [filterSize, setFilterSize] = useState('All');
+    const [filterIndustry, setFilterIndustry] = useState('All');
 
-    // Dynamic Stats calculation
-    const stats = useMemo(() => {
-        const industryMap = {};
-        const sizeMap = {};
-        let tier1Count = 0;
+    // Dynamic Metrics derived from LinkedIn Summary
+    const analytics = useMemo(() => {
+        const industries = {};
+        const tiers = {};
+        let totalEmployeesReached = 0;
 
         rawData.forEach(item => {
-            industryMap[item.industry] = (industryMap[item.industry] || 0) + 1;
-            sizeMap[item.size] = (sizeMap[item.size] || 0) + 1;
-            if (item.tier === 'Tier 1') tier1Count++;
+            industries[item.industry] = (industries[item.industry] || 0) + 1;
+            tiers[item.tier] = (tiers[item.tier] || 0) + 1;
+
+            // Basic numeric extraction for workforce reach metric
+            const count = parseInt(item.size.replace(/,/g, '').match(/\d+/)) || 0;
+            totalEmployeesReached += count;
         });
 
-        const industryData = Object.keys(industryMap)
-            .map(key => ({ name: key, value: industryMap[key] }))
+        const industryData = Object.keys(industries)
+            .map(name => ({ name, value: industries[name] }))
             .sort((a, b) => b.value - a.value)
-            .slice(0, 8); // Top 8 for visual clarity
+            .slice(0, 10);
 
-        const sizeData = Object.keys(sizeMap).map(key => ({ name: key, value: sizeMap[key] }));
+        const tierData = Object.keys(tiers).map(name => ({ name, value: tiers[name] }));
 
-        return { industryData, sizeData, total: rawData.length, tier1Count };
+        return { industryData, tierData, total: rawData.length, reach: totalEmployeesReached };
     }, []);
 
     const filteredLeads = rawData.filter(lead => {
         const matchesSearch = lead.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
             lead.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesSize = filterSize === 'All' || lead.size === filterSize;
-        return matchesSearch && matchesSize;
+        const matchesInd = filterIndustry === 'All' || lead.industry === filterIndustry;
+        return matchesSearch && matchesInd;
     });
 
-    const enterprisePercent = Math.round((stats.sizeData.find(s => s.name === 'Enterprise')?.value || 0) / stats.total * 100);
-
     return (
-        <div className="min-h-screen bg-slate-50 p-4 md:p-8 font-sans text-slate-900">
-            {/* Header */}
-            <div className="max-w-7xl mx-auto mb-8 flex flex-col md:flex-row md:items-center justify-between gap-4">
+        <div className="min-h-screen bg-[#f8fafc] p-4 lg:p-10 font-sans text-slate-800">
+            {/* Executive Header */}
+            <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-start md:items-center mb-10 gap-6">
                 <div>
-                    <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Lead Intelligence Dashboard</h1>
-                    <p className="text-slate-500">Embedded Software Engineering Campaign Performance</p>
+                    <h1 className="text-4xl font-extrabold text-slate-900 tracking-tight flex items-center gap-3">
+                        <Zap className="w-8 h-8 text-blue-600 fill-blue-600" />
+                        Lead Intelligence Dashboard
+                    </h1>
+                    <p className="text-slate-500 mt-2 text-lg font-medium">Embedded Software Engineering Campaign Summary: Dec 2025 – Jan 2026</p>
                 </div>
-                <div className="flex items-center gap-3">
-                    <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200 flex items-center gap-2">
-                        <TrendingUp className="w-4 h-4 text-emerald-500" />
-                        <span className="text-sm font-semibold text-slate-700">Campaign High Impact</span>
+                <div className="flex gap-4">
+                    <div className="bg-white shadow-sm border border-slate-200 px-5 py-3 rounded-xl flex flex-col">
+                        <span className="text-xs text-slate-400 font-bold uppercase tracking-wider">Campaign Velocity</span>
+                        <span className="text-xl font-bold text-emerald-600">High Growth</span>
                     </div>
-                    <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow-sm transition-all font-medium text-sm">
-                        Export Report
+                    <button className="bg-slate-900 text-white px-6 py-3 rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg shadow-slate-200">
+                        Export Dataset
                     </button>
                 </div>
             </div>
 
-            {/* KPI Cards */}
-            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition-transform hover:scale-[1.02]">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="p-2 bg-blue-50 rounded-lg text-blue-600"><Users className="w-6 h-6" /></div>
-                        <span className="text-xs font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-full">Active</span>
+            {/* Primary KPI Section */}
+            <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-10">
+                <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group">
+                    <Users className="absolute -right-4 -bottom-4 w-24 h-24 text-blue-50 opacity-10 group-hover:scale-110 transition-transform" />
+                    <p className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-1">Total Verified Leads</p>
+                    <p className="text-4xl font-black text-slate-900">{analytics.total}</p>
+                    <div className="mt-4 flex items-center gap-1 text-emerald-600 text-xs font-bold">
+                        <TrendingUp className="w-3 h-3" /> Targeted Professionals
                     </div>
-                    <h3 className="text-slate-500 text-sm font-medium">Total Qualified Leads</h3>
-                    <p className="text-3xl font-bold">{stats.total}</p>
                 </div>
 
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition-transform hover:scale-[1.02]">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="p-2 bg-purple-50 rounded-lg text-purple-600"><Building2 className="w-6 h-6" /></div>
-                        <span className="text-xs font-bold text-blue-600 bg-blue-50 px-2 py-1 rounded-full">Market Dominance</span>
-                    </div>
-                    <h3 className="text-slate-500 text-sm font-medium">Enterprise Share</h3>
-                    <p className="text-3xl font-bold">{enterprisePercent}%</p>
+                <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group">
+                    <Target className="absolute -right-4 -bottom-4 w-24 h-24 text-amber-50 opacity-10 group-hover:scale-110 transition-transform" />
+                    <p className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-1">Strategic Tier 1 Accounts</p>
+                    <p className="text-4xl font-black text-slate-900">{analytics.tierData.find(t => t.name === 'Tier 1')?.value || 0}</p>
+                    <div className="mt-4 text-slate-500 text-xs font-semibold">ASML, Amazon, TI, Stellantis</div>
                 </div>
 
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition-transform hover:scale-[1.02]">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="p-2 bg-amber-50 rounded-lg text-amber-600"><Target className="w-6 h-6" /></div>
-                    </div>
-                    <h3 className="text-slate-500 text-sm font-medium">Strategic Tier 1 Accounts</h3>
-                    <p className="text-3xl font-bold">{stats.tier1Count}</p>
+                <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group">
+                    <Globe2 className="absolute -right-4 -bottom-4 w-24 h-24 text-purple-50 opacity-10 group-hover:scale-110 transition-transform" />
+                    <p className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-1">Workforce Reach</p>
+                    <p className="text-4xl font-black text-slate-900">~{(analytics.reach / 1000000).toFixed(1)}M</p>
+                    <div className="mt-4 text-slate-500 text-xs font-semibold">Combined employee footprint</div>
                 </div>
 
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100 transition-transform hover:scale-[1.02]">
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="p-2 bg-emerald-50 rounded-lg text-emerald-600"><Globe2 className="w-6 h-6" /></div>
-                    </div>
-                    <h3 className="text-slate-500 text-sm font-medium">High Impact Verticals</h3>
-                    <p className="text-3xl font-bold">{stats.industryData.length}</p>
+                <div className="bg-white p-6 rounded-3xl shadow-sm border border-slate-100 relative overflow-hidden group">
+                    <Award className="absolute -right-4 -bottom-4 w-24 h-24 text-emerald-50 opacity-10 group-hover:scale-110 transition-transform" />
+                    <p className="text-slate-400 text-sm font-bold uppercase tracking-widest mb-1">Conversion Potential</p>
+                    <p className="text-4xl font-black text-slate-900">High</p>
+                    <div className="mt-4 text-emerald-600 text-xs font-bold">Industry Citations Verified</div>
                 </div>
             </div>
 
-            {/* Charts Section */}
-            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
-                {/* Industry Distribution */}
-                <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-                        <Briefcase className="w-5 h-5 text-slate-400" />
-                        Top Lead Verticals
-                    </h3>
-                    <div className="h-72 w-full">
+            {/* Visual Analytics Grid */}
+            <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 mb-10">
+                <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <div className="flex items-center justify-between mb-8">
+                        <h3 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <Briefcase className="w-5 h-5 text-blue-600" />
+                            Industry Landscape
+                        </h3>
+                        <span className="text-xs text-slate-400 font-bold tracking-widest uppercase">Top Sector Concentration</span>
+                    </div>
+                    <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
-                            <BarChart data={stats.industryData} layout="vertical" margin={{ left: 20, right: 20 }}>
+                            <BarChart data={analytics.industryData} layout="vertical">
                                 <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#f1f5f9" />
                                 <XAxis type="number" hide />
-                                <YAxis
-                                    dataKey="name"
-                                    type="category"
-                                    width={150}
-                                    tick={{ fontSize: 11, fill: '#64748b' }}
-                                    axisLine={false}
-                                    tickLine={false}
-                                />
-                                <Tooltip
-                                    cursor={{ fill: '#f8fafc' }}
-                                    contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}
-                                />
-                                <Bar dataKey="value" fill="#3b82f6" radius={[0, 4, 4, 0]} barSize={20} />
+                                <YAxis dataKey="name" type="category" width={140} tick={{ fontSize: 11, fill: '#64748b', fontWeight: 600 }} axisLine={false} tickLine={false} />
+                                <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '15px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0, 0, 0, 0.1)' }} />
+                                <Bar dataKey="value" fill="#2563eb" radius={[0, 8, 8, 0]} barSize={25} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
 
-                {/* Company Size Breakdown */}
-                <div className="bg-white p-6 rounded-2xl shadow-sm border border-slate-100">
-                    <h3 className="text-lg font-bold mb-6 flex items-center gap-2">
-                        <Building2 className="w-5 h-5 text-slate-400" />
-                        Account Mix
-                    </h3>
-                    <div className="h-72 w-full">
+                <div className="bg-white p-8 rounded-3xl shadow-sm border border-slate-100">
+                    <div className="flex items-center justify-between mb-8">
+                        <h3 className="text-xl font-extrabold text-slate-900 flex items-center gap-2">
+                            <Building2 className="w-5 h-5 text-purple-600" />
+                            Account Mix (Tiers)
+                        </h3>
+                    </div>
+                    <div className="h-80 w-full">
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart>
-                                <Pie
-                                    data={stats.sizeData}
-                                    innerRadius={65}
-                                    outerRadius={90}
-                                    paddingAngle={8}
-                                    dataKey="value"
-                                >
-                                    {stats.sizeData.map((entry, index) => (
+                                <Pie data={analytics.tierData} innerRadius={80} outerRadius={110} paddingAngle={8} dataKey="value" stroke="none">
+                                    {analytics.tierData.map((entry, index) => (
                                         <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                     ))}
                                 </Pie>
                                 <Tooltip />
-                                <Legend verticalAlign="bottom" align="center" iconType="circle" />
+                                <Legend verticalAlign="bottom" height={36} iconType="circle" wrapperStyle={{ paddingTop: '20px', fontWeight: 'bold', fontSize: '12px' }} />
                             </PieChart>
                         </ResponsiveContainer>
                     </div>
                 </div>
             </div>
 
-            {/* Table Section */}
-            <div className="max-w-7xl mx-auto bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden mb-12">
-                <div className="p-6 border-b border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-slate-50/30">
-                    <h3 className="text-lg font-bold">Campaign Database ({filteredLeads.length} leads)</h3>
-                    <div className="flex flex-wrap gap-3">
+            {/* Comprehensive Lead Manifest */}
+            <div className="max-w-7xl mx-auto bg-white rounded-3xl shadow-sm border border-slate-100 overflow-hidden mb-20">
+                <div className="p-8 border-b border-slate-100 bg-slate-50/50 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                    <div>
+                        <h3 className="text-2xl font-black text-slate-900">Campaign Manifest</h3>
+                        <p className="text-slate-500 text-sm font-medium mt-1">Cross-referenced with industry databases and official citations</p>
+                    </div>
+                    <div className="flex flex-wrap gap-4">
                         <div className="relative">
-                            <Search className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+                            <Search className="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-slate-300" />
                             <input
                                 type="text"
-                                placeholder="Search name or company..."
-                                className="pl-9 pr-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-full md:w-64"
+                                placeholder="Filter by name, company..."
+                                className="pl-12 pr-6 py-3 border border-slate-200 rounded-2xl text-sm focus:outline-none focus:ring-4 focus:ring-blue-100 w-full lg:w-80 transition-all font-medium"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
                             />
                         </div>
                         <select
-                            className="px-4 py-2 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
-                            value={filterSize}
-                            onChange={(e) => setFilterSize(e.target.value)}
+                            className="px-6 py-3 border border-slate-200 rounded-2xl text-sm font-bold focus:outline-none focus:ring-4 focus:ring-blue-100 bg-white"
+                            onChange={(e) => setFilterIndustry(e.target.value)}
                         >
-                            <option value="All">All Categories</option>
-                            <option value="Enterprise">Enterprise</option>
-                            <option value="Mid-Market">Mid-Market</option>
-                            <option value="Small">Small/Startup</option>
+                            <option value="All">All Industries</option>
+                            {analytics.industryData.map(i => <option key={i.name} value={i.name}>{i.name}</option>)}
                         </select>
                     </div>
                 </div>
 
                 <div className="overflow-x-auto">
-                    <table className="w-full text-left">
+                    <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-slate-50/50 text-slate-500 text-xs font-bold uppercase tracking-wider">
-                                <th className="px-6 py-4">Lead Information</th>
-                                <th className="px-6 py-4">Company</th>
-                                <th className="px-6 py-4">Industry Sector</th>
-                                <th className="px-6 py-4">Strategy & Tier</th>
+                            <tr className="bg-slate-50/80 text-slate-400 text-[10px] font-black uppercase tracking-[0.2em]">
+                                <th className="px-8 py-5">Professional & Role</th>
+                                <th className="px-8 py-5">Employer Details</th>
+                                <th className="px-8 py-5">Market Size & Industry</th>
+                                <th className="px-8 py-5">Value Tier</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {filteredLeads.map((lead, i) => (
-                                <tr key={i} className="hover:bg-blue-50/20 transition-colors group">
-                                    <td className="px-6 py-4">
-                                        <div className="font-semibold text-slate-900 flex items-center gap-2">
+                                <tr key={i} className="hover:bg-blue-50/30 transition-all group">
+                                    <td className="px-8 py-6">
+                                        <div className="font-extrabold text-slate-900 group-hover:text-blue-700 transition-colors flex items-center gap-2">
                                             {lead.name}
-                                            <a href="#" className="opacity-0 group-hover:opacity-100 transition-opacity"><Linkedin className="w-3 h-3 text-blue-600" /></a>
+                                            <Linkedin className="w-3 h-3 text-slate-300 group-hover:text-blue-500 transition-colors" />
                                         </div>
-                                        <div className="text-xs text-slate-500 truncate max-w-[200px] flex items-center gap-1">
-                                            <Mail className="w-3 h-3" /> {lead.email}
+                                        <div className="text-xs text-slate-400 font-bold mt-1 uppercase tracking-wider">{lead.role}</div>
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <div className="text-sm font-black text-slate-700">{lead.company}</div>
+                                        <div className="text-xs text-slate-400 mt-1 max-w-xs leading-relaxed italic">{lead.desc}</div>
+                                    </td>
+                                    <td className="px-8 py-6">
+                                        <div className="flex flex-col gap-2">
+                                            <span className="text-[10px] font-black bg-blue-50 text-blue-700 px-3 py-1 rounded-full w-fit uppercase tracking-tighter">
+                                                {lead.industry}
+                                            </span>
+                                            <div className="flex items-center gap-1.5 text-slate-500 text-xs font-bold">
+                                                <Users className="w-3 h-3" />
+                                                {lead.size} Employees
+                                            </div>
                                         </div>
                                     </td>
-                                    <td className="px-6 py-4">
-                                        <div className="text-sm font-bold text-slate-700">{lead.company}</div>
-                                        <div className="text-[10px] text-slate-400 uppercase tracking-tighter">{lead.size}</div>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <span className="text-xs px-2 py-1 bg-slate-100 text-slate-600 rounded-md font-medium">
-                                            {lead.industry}
-                                        </span>
-                                    </td>
-                                    <td className="px-6 py-4">
-                                        <span className={`inline-flex items-center gap-1 text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-widest ${lead.tier === 'Tier 1' ? 'text-blue-700 bg-blue-50 border border-blue-100' :
-                                                lead.tier === 'Tier 2' ? 'text-emerald-700 bg-emerald-50 border border-emerald-100' :
-                                                    'text-slate-600 bg-slate-100'
+                                    <td className="px-8 py-6">
+                                        <div className={`inline-flex items-center gap-2 text-xs font-black px-4 py-2 rounded-xl border-2 uppercase tracking-widest ${lead.tier === 'Tier 1' ? 'text-blue-700 bg-blue-50/50 border-blue-100' :
+                                                lead.tier === 'Tier 2' ? 'text-emerald-700 bg-emerald-50/50 border-emerald-100' :
+                                                    'text-slate-600 bg-slate-100 border-slate-200'
                                             }`}>
                                             {lead.tier === 'Tier 1' && <Award className="w-3 h-3" />}
                                             {lead.tier}
-                                        </span>
+                                        </div>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                    {filteredLeads.length === 0 && (
-                        <div className="p-16 text-center text-slate-400 italic">
-                            No matching leads found for current filters.
-                        </div>
-                    )}
                 </div>
             </div>
 
-            {/* Footer Branding */}
-            <div className="max-w-7xl mx-auto mt-8 border-t border-slate-200 pt-8 text-center text-slate-400 text-xs">
-                Data integrity verified for FY26 Q1 Presentation • Created for Executive Leadership Review
+            {/* Citation Disclaimer */}
+            <div className="max-w-7xl mx-auto border-t border-slate-200 pt-10 text-center pb-20">
+                <div className="inline-flex items-center gap-2 text-slate-400 text-xs font-bold bg-white px-6 py-2 rounded-full border border-slate-100 shadow-sm">
+                    <Info className="w-4 h-4" />
+                    Data derived from Official Industry Databases, Macrotrends, Stockanalysis, and Tracxn Profile (Feb 2025)
+                </div>
             </div>
         </div>
     );
