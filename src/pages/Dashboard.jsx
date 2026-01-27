@@ -16,6 +16,7 @@ import {
     BookOpen,
     Briefcase,
     ShieldCheck,
+    Cpu,
     Workflow as WorkflowIcon
 } from 'lucide-react';
 
