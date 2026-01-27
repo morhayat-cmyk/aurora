@@ -12,7 +12,8 @@ import {
     ArrowRight,
     BarChart3,
     Calendar,
-    PieChart
+    PieChart,
+    BookOpen
 } from 'lucide-react';
 
 const Card = ({ title, value, subtext, icon: Icon, trend, trendValue }) => (
@@ -143,6 +144,10 @@ export default function Dashboard() {
                             <Link to="/aurora-labs-2" className="group flex items-center space-x-2 bg-white text-slate-700 hover:text-indigo-600 border border-slate-200 px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
                                 <Activity className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
                                 <span className="font-semibold">Auroralabswebsite 2</span>
+                            </Link>
+                            <Link to="/loci-playbook" className="group flex items-center space-x-2 bg-white text-slate-700 hover:text-indigo-600 border border-slate-200 px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+                                <BookOpen className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                                <span className="font-semibold">LOCI Playbook</span>
                             </Link>
                         </div>
                     </div>

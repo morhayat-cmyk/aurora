@@ -9,6 +9,7 @@ import January7_11Leads from './pages/January7_11Leads';
 import EmbeddedLeads from './pages/EmbeddedLeads';
 import Auroralabswebsite from './pages/Auroralabswebsite';
 import Auroralabs2 from './pages/Auroralabs2';
+import LociPlaybook from './pages/LociPlaybook';
 
 // Main App component that operates as a Router
 export default function App() {
@@ -24,6 +25,7 @@ export default function App() {
         <Route path="/embedded-leads" element={<EmbeddedLeads />} />
         <Route path="/aurora-labs" element={<Auroralabswebsite />} />
         <Route path="/aurora-labs-2" element={<Auroralabs2 />} />
+        <Route path="/loci-playbook" element={<LociPlaybook />} />
       </Routes>
     </Router>
   );
