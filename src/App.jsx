@@ -10,6 +10,10 @@ import EmbeddedLeads from './pages/EmbeddedLeads';
 import Auroralabswebsite from './pages/Auroralabswebsite';
 import Auroralabs2 from './pages/Auroralabs2';
 import LociPlaybook from './pages/LociPlaybook';
+import AuroralabsUseCase from './pages/AuroralabsUseCase';
+import AuroralabsDeepTech from './pages/AuroralabsDeepTech';
+import AuroralabsProof from './pages/AuroralabsProof';
+import IntegrationAndFlow from './pages/IntegrationAndFlow';
 
 // Main App component that operates as a Router
 export default function App() {
@@ -26,6 +30,10 @@ export default function App() {
         <Route path="/aurora-labs" element={<Auroralabswebsite />} />
         <Route path="/aurora-labs-2" element={<Auroralabs2 />} />
         <Route path="/loci-playbook" element={<LociPlaybook />} />
+        <Route path="/use-cases" element={<AuroralabsUseCase />} />
+        <Route path="/deep-tech" element={<AuroralabsDeepTech />} />
+        <Route path="/proof" element={<AuroralabsProof />} />
+        <Route path="/integration-and-flow" element={<IntegrationAndFlow />} />
       </Routes>
     </Router>
   );

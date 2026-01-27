@@ -13,7 +13,10 @@ import {
     BarChart3,
     Calendar,
     PieChart,
-    BookOpen
+    BookOpen,
+    Briefcase,
+    ShieldCheck,
+    Workflow as WorkflowIcon
 } from 'lucide-react';
 
 const Card = ({ title, value, subtext, icon: Icon, trend, trendValue }) => (
@@ -148,6 +151,22 @@ export default function Dashboard() {
                             <Link to="/loci-playbook" className="group flex items-center space-x-2 bg-white text-slate-700 hover:text-indigo-600 border border-slate-200 px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
                                 <BookOpen className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
                                 <span className="font-semibold">LOCI Playbook</span>
+                            </Link>
+                            <Link to="/use-cases" className="group flex items-center space-x-2 bg-white text-slate-700 hover:text-indigo-600 border border-slate-200 px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+                                <Briefcase className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                                <span className="font-semibold">Use Cases</span>
+                            </Link>
+                            <Link to="/deep-tech" className="group flex items-center space-x-2 bg-white text-slate-700 hover:text-indigo-600 border border-slate-200 px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+                                <Cpu className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                                <span className="font-semibold">Deep Tech</span>
+                            </Link>
+                            <Link to="/proof" className="group flex items-center space-x-2 bg-white text-slate-700 hover:text-indigo-600 border border-slate-200 px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+                                <ShieldCheck className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                                <span className="font-semibold">Proof</span>
+                            </Link>
+                            <Link to="/integration-and-flow" className="group flex items-center space-x-2 bg-white text-slate-700 hover:text-indigo-600 border border-slate-200 px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+                                <WorkflowIcon className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                                <span className="font-semibold">Integration & Flow</span>
                             </Link>
                         </div>
                     </div>
