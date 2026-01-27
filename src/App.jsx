@@ -8,6 +8,7 @@ import DecemberOverview from './pages/DecemberOverview';
 import January7_11Leads from './pages/January7_11Leads';
 import EmbeddedLeads from './pages/EmbeddedLeads';
 import Auroralabswebsite from './pages/Auroralabswebsite';
+import Auroralabs2 from './pages/Auroralabs2';
 
 // Main App component that operates as a Router
 export default function App() {
@@ -22,6 +23,7 @@ export default function App() {
         <Route path="/january-7-11-leads" element={<January7_11Leads />} />
         <Route path="/embedded-leads" element={<EmbeddedLeads />} />
         <Route path="/aurora-labs" element={<Auroralabswebsite />} />
+        <Route path="/aurora-labs-2" element={<Auroralabs2 />} />
       </Routes>
     </Router>
   );
