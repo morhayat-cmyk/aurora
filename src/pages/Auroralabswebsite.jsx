@@ -108,7 +108,7 @@ const Navbar = () => {
     ];
 
     return (
-        <nav className={`fixed w-full z-50 transition-all duration-300 ${scrolled ? 'bg-gray-950/90 backdrop-blur-md border-b border-gray-800 py-3' : 'bg-transparent py-5'}`}>
+        <nav className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${scrolled ? 'bg-gray-950/80 backdrop-blur-lg border-b border-white/10 py-3 shadow-[0_4px_30px_rgba(0,0,0,0.3)]' : 'bg-transparent py-5'}`}>
             <div className="container mx-auto px-6 flex justify-between items-center">
                 <div className="flex items-center space-x-2">
                     <div className="w-8 h-8 bg-emerald-500 rounded flex items-center justify-center">
@@ -320,7 +320,7 @@ const Features = () => {
     ];
 
     return (
-        <section className="py-24 bg-gray-950" id="technology">
+        <section className="py-24 bg-gray-950" id="capabilities">
             <div className="container mx-auto px-6">
                 <SectionHeading
                     badge="Capabilities"

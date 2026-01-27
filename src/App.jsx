@@ -14,6 +14,7 @@ import AuroralabsUseCase from './pages/AuroralabsUseCase';
 import AuroralabsDeepTech from './pages/AuroralabsDeepTech';
 import AuroralabsProof from './pages/AuroralabsProof';
 import IntegrationAndFlow from './pages/IntegrationAndFlow';
+import Lociflags from './pages/Lociflags';
 
 // Main App component that operates as a Router
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
         <Route path="/deep-tech" element={<AuroralabsDeepTech />} />
         <Route path="/proof" element={<AuroralabsProof />} />
         <Route path="/integration-and-flow" element={<IntegrationAndFlow />} />
+        <Route path="/loci-flags" element={<Lociflags />} />
       </Routes>
     </Router>
   );
