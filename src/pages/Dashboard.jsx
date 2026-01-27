@@ -136,6 +136,10 @@ export default function Dashboard() {
                                 <Calendar className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
                                 <span className="font-semibold">Embedded Leads</span>
                             </Link>
+                            <Link to="/aurora-labs" className="group flex items-center space-x-2 bg-white text-slate-700 hover:text-indigo-600 border border-slate-200 px-6 py-3 rounded-xl transition-all shadow-sm hover:shadow-md transform hover:-translate-y-0.5">
+                                <Activity className="w-4 h-4 text-slate-400 group-hover:text-indigo-500 transition-colors" />
+                                <span className="font-semibold">Auroralabswebsite</span>
+                            </Link>
                         </div>
                     </div>
                 </header>
