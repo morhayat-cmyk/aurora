@@ -78,6 +78,15 @@ const PipelineStep = ({ step, title, active }) => (
     </div>
 );
 
+// --- Helpers ---
+
+const scrollToId = (id) => {
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
+};
+
 // --- Sections ---
 
 const Navbar = () => {
@@ -111,7 +120,15 @@ const Navbar = () => {
                 {/* Desktop Nav */}
                 <div className="hidden md:flex items-center space-x-8">
                     {navLinks.map((link) => (
-                        <a key={link.name} href={link.href} className="text-sm font-medium text-gray-300 hover:text-white transition-colors">
+                        <a
+                            key={link.name}
+                            href={link.href}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                scrollToId(link.href.replace('#', ''));
+                            }}
+                            className="text-sm font-medium text-gray-300 hover:text-white transition-colors"
+                        >
                             {link.name}
                         </a>
                     ))}
@@ -132,7 +149,16 @@ const Navbar = () => {
             {isOpen && (
                 <div className="md:hidden bg-gray-900 border-b border-gray-800 absolute w-full px-6 py-4 flex flex-col space-y-4 shadow-2xl">
                     {navLinks.map((link) => (
-                        <a key={link.name} href={link.href} onClick={() => setIsOpen(false)} className="text-gray-300 hover:text-white py-2 block">
+                        <a
+                            key={link.name}
+                            href={link.href}
+                            onClick={(e) => {
+                                e.preventDefault();
+                                setIsOpen(false);
+                                scrollToId(link.href.replace('#', ''));
+                            }}
+                            className="text-gray-300 hover:text-white py-2 block"
+                        >
                             {link.name}
                         </a>
                     ))}
@@ -171,7 +197,11 @@ const Hero = () => {
                     </p>
 
                     <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4 w-full sm:w-auto">
-                        <Button variant="primary" className="w-full sm:w-auto h-12 px-8 flex items-center justify-center group">
+                        <Button
+                            variant="primary"
+                            className="w-full sm:w-auto h-12 px-8 flex items-center justify-center group"
+                            onClick={() => scrollToId('pricing')}
+                        >
                             Start Free
                             <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </Button>
@@ -290,7 +320,7 @@ const Features = () => {
     ];
 
     return (
-        <section className="py-24 bg-gray-950">
+        <section className="py-24 bg-gray-950" id="technology">
             <div className="container mx-auto px-6">
                 <SectionHeading
                     badge="Capabilities"
@@ -540,10 +570,10 @@ const Footer = () => {
                     <div>
                         <h4 className="text-white font-bold mb-6">Product</h4>
                         <ul className="space-y-4 text-sm text-gray-500">
-                            <li><a href="#" className="hover:text-emerald-400">How it Works</a></li>
-                            <li><a href="#" className="hover:text-emerald-400">What LOCI Flags</a></li>
-                            <li><a href="#" className="hover:text-emerald-400">Integrations</a></li>
-                            <li><a href="#" className="hover:text-emerald-400">Pricing</a></li>
+                            <li><a href="#product" onClick={(e) => { e.preventDefault(); scrollToId('product'); }} className="hover:text-emerald-400">How it Works</a></li>
+                            <li><a href="#technology" onClick={(e) => { e.preventDefault(); scrollToId('technology'); }} className="hover:text-emerald-400">What LOCI Flags</a></li>
+                            <li><a href="#integrations" onClick={(e) => { e.preventDefault(); scrollToId('integrations'); }} className="hover:text-emerald-400">Integrations</a></li>
+                            <li><a href="#pricing" onClick={(e) => { e.preventDefault(); scrollToId('pricing'); }} className="hover:text-emerald-400">Pricing</a></li>
                         </ul>
                     </div>
 
@@ -552,7 +582,7 @@ const Footer = () => {
                         <ul className="space-y-4 text-sm text-gray-500">
                             <li><a href="#" className="hover:text-emerald-400">Documentation</a></li>
                             <li><a href="#" className="hover:text-emerald-400">API Reference</a></li>
-                            <li><a href="#" className="hover:text-emerald-400">Case Studies</a></li>
+                            <li><a href="#use-cases" onClick={(e) => { e.preventDefault(); scrollToId('use-cases'); }} className="hover:text-emerald-400">Case Studies</a></li>
                             <li><a href="#" className="hover:text-emerald-400">Blog</a></li>
                         </ul>
                     </div>
@@ -595,7 +625,7 @@ const Auroralabswebsite = () => {
             <Technology />
             <Proof />
 
-            <section className="py-24 relative overflow-hidden">
+            <section className="py-24 relative overflow-hidden" id="pricing">
                 <div className="absolute inset-0 bg-emerald-900/10"></div>
                 <div className="container mx-auto px-6 relative z-10 text-center">
                     <h2 className="text-4xl font-bold text-white mb-6">Ready to see the execution truth?</h2>
@@ -603,7 +633,7 @@ const Auroralabswebsite = () => {
                         Start using LOCI on your GitHub repositories today. No credit card required.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-                        <Button variant="primary" className="h-14 px-10 text-lg">Start Free</Button>
+                        <Button variant="primary" className="h-14 px-10 text-lg" onClick={() => scrollToId('pricing')}>Start Free</Button>
                         <Button variant="secondary" className="h-14 px-10 text-lg">Book a Demo</Button>
                     </div>
                 </div>
