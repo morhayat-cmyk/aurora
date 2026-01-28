@@ -16,6 +16,7 @@ import AuroralabsProof from './pages/AuroralabsProof';
 import IntegrationAndFlow from './pages/IntegrationAndFlow';
 import Lociflags from './pages/Lociflags';
 import LociWorks from './pages/LociWorks';
+import JanuaryMarketingLeads from './pages/JanuaryMarketingLeads';
 
 // Main App component that operates as a Router
 export default function App() {
@@ -38,6 +39,7 @@ export default function App() {
         <Route path="/integration-and-flow" element={<IntegrationAndFlow />} />
         <Route path="/loci-flags" element={<Lociflags />} />
         <Route path="/loci-works" element={<LociWorks />} />
+        <Route path="/january-marketing-leads" element={<JanuaryMarketingLeads />} />
       </Routes>
     </Router>
   );
