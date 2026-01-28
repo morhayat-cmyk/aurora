@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import {
     BarChart,
     Bar,
@@ -15,24 +15,29 @@ import {
 import {
     Users,
     DollarSign,
-    MousePointer2,
-    Activity,
+    MousePointer,
     Target,
-    Briefcase,
     Globe,
+    Briefcase,
+    Activity,
+    Filter,
     TrendingUp,
-    Layers,
-    Wifi,
-    Cpu
+    Award,
+    LayoutDashboard,
+    ChevronRight,
+    Calendar,
+    ArrowUpRight
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
-// --- Data Configuration ---
+// --- Data Configuration (Original Aurora Labs Data) ---
 
 const CAMPAIGN_DATA = {
     embedded: {
-        title: "Embedded Campaign",
-        icon: Cpu,
-        color: "#8b5cf6", // Violet
+        id: 'embedded',
+        title: "Embedded Software", // Renamed for display
+        subtitle: "Engineering & Systems",
+        color: "#8b5cf6",
         kpi: {
             audience: 28000,
             spend: 8696,
@@ -42,27 +47,27 @@ const CAMPAIGN_DATA = {
             ctr: 1.29,
             leads: 82,
             cpl: 106.05,
-            reachPercentage: 20.47
         },
         geo: [
-            { name: 'United States', impressions: 15050, clicks: 167, ctr: 1.11, leads: 123, openRate: 0.82 },
-            { name: 'Germany', impressions: 7242, clicks: 105, ctr: 1.45, leads: 79, openRate: 1.09 },
-            { name: 'Italy', impressions: 3095, clicks: 40, ctr: 1.29, leads: 33, openRate: 1.07 },
-            { name: 'Israel', impressions: 3091, clicks: 63, ctr: 2.04, leads: 46, openRate: 1.49 },
-            { name: 'Netherlands', impressions: 2473, clicks: 31, ctr: 1.25, leads: 29, openRate: 1.17 },
-            { name: 'Canada', impressions: 4020, clicks: 40, ctr: 1.00, leads: 30, openRate: 0.75 },
-            { name: 'UK', impressions: 2831, clicks: 43, ctr: 1.52, leads: 31, openRate: 1.10 },
+            { name: 'United States', impressions: 15050, clicks: 167, leads: 123 },
+            { name: 'Germany', impressions: 7242, clicks: 105, leads: 79 },
+            { name: 'Italy', impressions: 3095, clicks: 40, leads: 33 },
+            { name: 'Israel', impressions: 3091, clicks: 63, leads: 46 },
+            { name: 'Netherlands', impressions: 2473, clicks: 31, leads: 29 },
+            { name: 'Canada', impressions: 4020, clicks: 40, leads: 30 },
+            { name: 'UK', impressions: 2831, clicks: 43, leads: 31 },
         ],
         titles: [
             "Senior embedded software engineer", "Embedded developer", "Embedded design engineer",
             "Embedded software engineer", "Embedded system developer", "Senior embedded engineer",
-            "Embedded system software engineer", "Senior embedded system engineer", "Embedded engineer", "Embedded system engineer"
+            "Embedded system software engineer"
         ]
     },
     network: {
-        title: "Network Campaign",
-        icon: Wifi,
-        color: "#06b6d4", // Cyan
+        id: 'network',
+        title: "Network Engineer", // Renamed for display
+        subtitle: "Hardware & Connectivity",
+        color: "#06b6d4",
         kpi: {
             audience: 150000,
             spend: 2584,
@@ -72,16 +77,15 @@ const CAMPAIGN_DATA = {
             ctr: 1.12,
             leads: 25,
             cpl: 103.36,
-            reachPercentage: 63.70
         },
         geo: [
-            { name: 'United States', impressions: 9511, clicks: 102, ctr: 1.07, leads: 198, openRate: 1.16 },
-            { name: 'Germany', impressions: 421, clicks: 4, ctr: 1.53, leads: 17, openRate: 1.31 }, // Note: Leads here likely refers to Lead Form Opens based on context, keeping label consistent
-            { name: 'Italy', impressions: 708, clicks: 8, ctr: 1.13, leads: 26, openRate: 0.96 },
-            { name: 'Israel', impressions: 266, clicks: 7, ctr: 2.63, leads: 18, openRate: 1.77 },
-            { name: 'Netherlands', impressions: 582, clicks: 7, ctr: 1.20, leads: 19, openRate: 0.85 },
-            { name: 'Canada', impressions: 955, clicks: 13, ctr: 1.36, leads: 12, openRate: 1.01 },
-            { name: 'UK', impressions: 1809, clicks: 19, ctr: 1.05, leads: 28, openRate: 1.10 },
+            { name: 'United States', impressions: 9511, clicks: 102, leads: 198 },
+            { name: 'Germany', impressions: 421, clicks: 4, leads: 17 },
+            { name: 'Italy', impressions: 708, clicks: 8, leads: 26 },
+            { name: 'Israel', impressions: 266, clicks: 7, leads: 18 },
+            { name: 'Netherlands', impressions: 582, clicks: 7, leads: 19 },
+            { name: 'Canada', impressions: 955, clicks: 13, leads: 12 },
+            { name: 'UK', impressions: 1809, clicks: 19, leads: 28 },
         ],
         titles: [
             "Network engineer", "Hardware networking specialist", "Hardware network engineer",
@@ -89,9 +93,10 @@ const CAMPAIGN_DATA = {
         ]
     },
     infra: {
-        title: "Infra Campaign",
-        icon: Layers,
-        color: "#ec4899", // Pink
+        id: 'infra',
+        title: "Infrastructure Engineer", // Renamed for display
+        subtitle: "IT & Architecture",
+        color: "#ec4899",
         kpi: {
             audience: 57000,
             spend: 2382,
@@ -101,299 +106,337 @@ const CAMPAIGN_DATA = {
             ctr: 0.86,
             leads: 26,
             cpl: 91.62,
-            reachPercentage: 59.02
         },
         geo: [
-            { name: 'United States', impressions: 6878, clicks: 78, ctr: 1.13, leads: 111, openRate: 0.82 },
-            { name: 'Germany', impressions: 1079, clicks: 5, ctr: 0.46, leads: 15, openRate: 0.36 },
-            { name: 'Italy', impressions: 1509, clicks: 10, ctr: 0.66, leads: 25, openRate: 0.43 },
-            { name: 'Israel', impressions: 1390, clicks: 13, ctr: 0.94, leads: 22, openRate: 0.51 },
-            { name: 'Netherlands', impressions: 1223, clicks: 4, ctr: 0.33, leads: 17, openRate: 0.38 },
-            { name: 'Canada', impressions: 2453, clicks: 12, ctr: 0.49, leads: 18, openRate: 0.74 },
-            { name: 'UK', impressions: 5663, clicks: 51, ctr: 0.90, leads: 51, openRate: 0.63 },
+            { name: 'United States', impressions: 6878, clicks: 78, leads: 111 },
+            { name: 'Germany', impressions: 1079, clicks: 5, leads: 15 },
+            { name: 'Italy', impressions: 1509, clicks: 10, leads: 25 },
+            { name: 'Israel', impressions: 1390, clicks: 13, leads: 22 },
+            { name: 'Netherlands', impressions: 1223, clicks: 4, leads: 17 },
+            { name: 'Canada', impressions: 2453, clicks: 12, leads: 18 },
+            { name: 'UK', impressions: 5663, clicks: 51, leads: 51 },
         ],
         titles: [
-            "Infrastructure Manager", "Information Technology Infrastructure Engineer", "Network Infrastructure Engineer",
-            "Lead Infrastructure Engineer", "Manager Infrastructure Engineering", "Infrastructure System Engineer",
-            "Principal Infrastructure Engineer", "Senior Lead Infrastructure Engineer", "Director of Infrastructure",
-            "Infrastructure Engineer", "Head of Infrastructure", "Infrastructure Lead", "Senior Infrastructure Engineer"
+            "Infrastructure Manager", "IT Infrastructure Engineer", "Network Infrastructure Engineer",
+            "Lead Infrastructure Engineer", "Manager Infrastructure Engineering", "Principal Infrastructure Engineer"
         ]
     }
 };
 
 // --- Components ---
 
-const StatCard = ({ label, value, subtext, prefix = "", suffix = "", icon: Icon, trend }) => (
-    <div className="bg-slate-800/50 backdrop-blur-sm border border-slate-700 rounded-xl p-5 shadow-lg flex flex-col justify-between hover:border-slate-600 transition-all duration-300">
-        <div className="flex justify-between items-start mb-4">
-            <div className="p-2 bg-slate-700/50 rounded-lg text-slate-300">
-                {Icon && <Icon size={20} />}
-            </div>
-            {trend && (
-                <span className={`text-xs font-medium px-2 py-1 rounded-full ${trend === 'high' ? 'bg-emerald-500/10 text-emerald-400' : 'bg-blue-500/10 text-blue-400'}`}>
-                    {trend === 'high' ? 'High Perf.' : 'Steady'}
-                </span>
-            )}
-        </div>
+const KPICard = ({ title, value, subtext, icon: Icon, colorClass }) => (
+    <div className="bg-white rounded-xl shadow-sm p-6 border border-slate-200 flex items-start justify-between hover:shadow-md transition-shadow">
         <div>
-            <h3 className="text-slate-400 text-sm font-medium mb-1">{label}</h3>
-            <div className="text-2xl font-bold text-white tracking-tight">
-                {prefix}{typeof value === 'number' ? value.toLocaleString() : value}{suffix}
-            </div>
-            {subtext && <p className="text-xs text-slate-500 mt-2">{subtext}</p>}
+            <p className="text-sm font-medium text-slate-500 mb-1">{title}</p>
+            <h3 className="text-2xl font-bold text-slate-800">{value}</h3>
+            {subtext && <p className="text-xs text-slate-400 mt-1">{subtext}</p>}
+        </div>
+        <div className={`p-3 rounded-lg ${colorClass} bg-opacity-10`}>
+            <Icon className={`w-6 h-6 ${colorClass.replace('bg-', 'text-')}`} />
         </div>
     </div>
 );
 
-const SectionHeader = ({ title, subtitle }) => (
-    <div className="mb-6 mt-8">
-        <h3 className="text-xl font-semibold text-white flex items-center gap-2">
-            <div className="h-6 w-1 bg-indigo-500 rounded-full"></div>
-            {title}
-        </h3>
-        {subtitle && <p className="text-slate-400 text-sm ml-3 mt-1">{subtitle}</p>}
+const SegmentSelector = ({ selected, onSelect }) => (
+    <div className="flex flex-wrap gap-2 mb-6">
+        {Object.values(CAMPAIGN_DATA).map((segment) => (
+            <button
+                key={segment.id}
+                onClick={() => onSelect(segment.id)}
+                className={`px-4 py-2 rounded-full text-sm font-medium transition-all ${selected === segment.id
+                    ? 'bg-blue-600 text-white shadow-md'
+                    : 'bg-white text-slate-600 border border-slate-200 hover:bg-slate-50'
+                    }`}
+            >
+                {segment.title}
+            </button>
+        ))}
     </div>
 );
 
-const JanuaryMarketingLeads = () => {
-    const [activeTab, setActiveTab] = useState('embedded');
-    const data = CAMPAIGN_DATA[activeTab];
-
-    // Calculate global totals for the header
-    const totals = useMemo(() => {
-        return Object.values(CAMPAIGN_DATA).reduce((acc, curr) => ({
-            spend: acc.spend + curr.kpi.spend,
-            leads: acc.leads + curr.kpi.leads,
-            impressions: acc.impressions + curr.kpi.impressions
-        }), { spend: 0, leads: 0, impressions: 0 });
-    }, []);
+const ComparisonChart = ({ data }) => {
+    // Transform object data to array for Recharts
+    const chartData = Object.values(data).map(item => ({
+        name: item.title.split(" ")[0], // Short name (Embedded, Network, Infra)
+        Impressions: item.kpi.impressions,
+        Clicks: item.kpi.clicks,
+        Leads: item.kpi.leads * 10 // Scale for visibility
+    }));
 
     return (
-        <div className="min-h-screen bg-slate-900 text-slate-200 font-sans selection:bg-indigo-500/30">
-
-            {/* Top Navigation / Header */}
-            <header className="sticky top-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50">
-                <div className="max-w-7xl mx-auto px-6 py-4">
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-                        <div className="flex items-center gap-3">
-                            <div className="w-10 h-10 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                                <TrendingUp className="text-white" size={24} />
-                            </div>
-                            <div>
-                                <h1 className="text-xl font-bold text-white tracking-tight">Aurora Labs</h1>
-                                <p className="text-xs text-indigo-400 font-medium tracking-wider uppercase">Marketing Board Deck</p>
-                            </div>
-                        </div>
-
-                        {/* Global Stats Summary (Small) */}
-                        <div className="hidden md:flex gap-6 text-sm">
-                            <div>
-                                <span className="text-slate-500 block text-xs">Total Investment</span>
-                                <span className="text-white font-semibold">${totals.spend.toLocaleString()}</span>
-                            </div>
-                            <div>
-                                <span className="text-slate-500 block text-xs">Total Impressions</span>
-                                <span className="text-white font-semibold">{(totals.impressions / 1000).toFixed(1)}k</span>
-                            </div>
-                            <div>
-                                <span className="text-slate-500 block text-xs">Total Leads</span>
-                                <span className="text-emerald-400 font-semibold">{totals.leads}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </header>
-
-            <main className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
-
-                {/* Tab Navigation */}
-                <div className="flex flex-wrap gap-2 mb-8 bg-slate-800/40 p-1 rounded-2xl border border-slate-700/50 w-full md:w-fit">
-                    {Object.keys(CAMPAIGN_DATA).map((key) => {
-                        const tabData = CAMPAIGN_DATA[key];
-                        const Icon = tabData.icon;
-                        const isActive = activeTab === key;
-                        return (
-                            <button
-                                key={key}
-                                onClick={() => setActiveTab(key)}
-                                className={`
-                  flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-medium transition-all duration-200
-                  ${isActive
-                                        ? 'bg-slate-700 text-white shadow-md ring-1 ring-slate-600'
-                                        : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800'
-                                    }
-                `}
-                            >
-                                <Icon size={16} className={isActive ? 'text-indigo-400' : ''} />
-                                {tabData.title}
-                            </button>
-                        );
-                    })}
-                </div>
-
-                {/* KPI Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-                    <StatCard
-                        label="Total Spend"
-                        value={data.kpi.spend}
-                        prefix="$"
-                        icon={DollarSign}
-                        subtext={`${(data.kpi.spend / data.kpi.leads).toFixed(0)} per lead avg`}
+        <div className="h-80 w-full">
+            <ResponsiveContainer width="100%" height="100%">
+                <BarChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                    <XAxis dataKey="name" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                    <YAxis stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                    <Tooltip
+                        cursor={{ fill: '#f1f5f9' }}
+                        contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
                     />
-                    <StatCard
-                        label="Leads Generated"
-                        value={data.kpi.leads}
-                        icon={Users}
-                        trend="high"
-                        subtext={`CPL: $${data.kpi.cpl}`}
-                    />
-                    <StatCard
-                        label="Click Through Rate"
-                        value={data.kpi.ctr}
-                        suffix="%"
-                        icon={MousePointer2}
-                        subtext={`${data.kpi.clicks} Total Clicks`}
-                    />
-                    <StatCard
-                        label="Total Impressions"
-                        value={data.kpi.impressions}
-                        icon={Activity}
-                        subtext={`Reach: ${data.kpi.reach.toLocaleString()}`}
-                    />
-                </div>
-
-                {/* Audience Reach Visual */}
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
-                    <div className="lg:col-span-2 bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-sm">
-                        <h3 className="text-lg font-semibold text-white mb-6">Geo Performance (Impressions vs Clicks)</h3>
-                        <div className="h-80 w-full">
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={data.geo} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#334155" vertical={false} />
-                                    <XAxis dataKey="name" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-                                    <YAxis yAxisId="left" orientation="left" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-                                    <YAxis yAxisId="right" orientation="right" stroke="#94a3b8" fontSize={12} tickLine={false} axisLine={false} />
-                                    <Tooltip
-                                        contentStyle={{ backgroundColor: '#1e293b', borderColor: '#475569', color: '#f8fafc' }}
-                                        itemStyle={{ color: '#e2e8f0' }}
-                                        cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }}
-                                    />
-                                    <Legend />
-                                    <Bar yAxisId="left" dataKey="impressions" name="Impressions" fill={data.color} radius={[4, 4, 0, 0]} maxBarSize={50} />
-                                    <Bar yAxisId="right" dataKey="clicks" name="Clicks" fill="#10b981" radius={[4, 4, 0, 0]} maxBarSize={50} />
-                                </BarChart>
-                            </ResponsiveContainer>
-                        </div>
-                    </div>
-
-                    <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-sm flex flex-col">
-                        <h3 className="text-lg font-semibold text-white mb-2">Market Penetration</h3>
-                        <p className="text-slate-400 text-sm mb-6">Percentage of targeted audience reached.</p>
-
-                        <div className="flex-1 flex flex-col items-center justify-center relative">
-                            <ResponsiveContainer width="100%" height={200}>
-                                <PieChart>
-                                    <Pie
-                                        data={[
-                                            { name: 'Reached', value: data.kpi.reachPercentage },
-                                            { name: 'Remaining', value: 100 - data.kpi.reachPercentage }
-                                        ]}
-                                        cx="50%"
-                                        cy="50%"
-                                        innerRadius={60}
-                                        outerRadius={80}
-                                        fill="#8884d8"
-                                        paddingAngle={5}
-                                        dataKey="value"
-                                        stroke="none"
-                                    >
-                                        <Cell fill={data.color} />
-                                        <Cell fill="#334155" />
-                                    </Pie>
-                                </PieChart>
-                            </ResponsiveContainer>
-                            <div className="absolute inset-0 flex items-center justify-center flex-col pointer-events-none">
-                                <span className="text-3xl font-bold text-white">{data.kpi.reachPercentage}%</span>
-                                <span className="text-xs text-slate-400 uppercase tracking-wide">Reached</span>
-                            </div>
-                        </div>
-
-                        <div className="mt-6 space-y-4">
-                            <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
-                                <div className="flex items-center gap-2">
-                                    <Target size={16} className="text-slate-400" />
-                                    <span className="text-sm text-slate-300">Total Audience Size</span>
-                                </div>
-                                <span className="text-white font-semibold">{data.kpi.audience.toLocaleString()}</span>
-                            </div>
-                            <div className="flex justify-between items-center p-3 bg-slate-700/30 rounded-lg">
-                                <div className="flex items-center gap-2">
-                                    <Globe size={16} className="text-slate-400" />
-                                    <span className="text-sm text-slate-300">Unique Reach</span>
-                                </div>
-                                <span className="text-white font-semibold">{data.kpi.reach.toLocaleString()}</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                {/* Detailed Data Table */}
-                <SectionHeader title="Geographic Breakdown" subtitle="Detailed metrics by targeted region" />
-                <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl overflow-hidden shadow-sm mb-8">
-                    <div className="overflow-x-auto">
-                        <table className="w-full text-left border-collapse">
-                            <thead>
-                                <tr className="border-b border-slate-700/75 bg-slate-900/50 text-xs uppercase tracking-wider text-slate-400">
-                                    <th className="p-4 font-medium">Region</th>
-                                    <th className="p-4 font-medium text-right">Impressions</th>
-                                    <th className="p-4 font-medium text-right">Clicks</th>
-                                    <th className="p-4 font-medium text-right">CTR</th>
-                                    <th className="p-4 font-medium text-right">Lead Forms</th>
-                                    <th className="p-4 font-medium text-right">Open Rate</th>
-                                </tr>
-                            </thead>
-                            <tbody className="text-sm">
-                                {data.geo.map((row, index) => (
-                                    <tr key={index} className="border-b border-slate-700/50 hover:bg-slate-700/30 transition-colors">
-                                        <td className="p-4 font-medium text-white flex items-center gap-2">
-                                            <div className="w-2 h-2 rounded-full" style={{ backgroundColor: data.color }}></div>
-                                            {row.name}
-                                        </td>
-                                        <td className="p-4 text-right text-slate-300">{row.impressions.toLocaleString()}</td>
-                                        <td className="p-4 text-right text-slate-300">{row.clicks}</td>
-                                        <td className="p-4 text-right">
-                                            <span className={`px-2 py-1 rounded text-xs font-medium ${row.ctr > 1.2 ? 'bg-emerald-500/10 text-emerald-400' : 'text-slate-400 bg-slate-700/30'}`}>
-                                                {row.ctr}%
-                                            </span>
-                                        </td>
-                                        <td className="p-4 text-right text-white font-semibold">{row.leads}</td>
-                                        <td className="p-4 text-right text-slate-400">{row.openRate}%</td>
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-
-                {/* Job Titles / Targeting */}
-                <SectionHeader title="Targeted Roles" subtitle="Job titles actively engaged in this campaign" />
-                <div className="bg-slate-800/50 backdrop-blur border border-slate-700 rounded-2xl p-6 shadow-sm">
-                    <div className="flex flex-wrap gap-2">
-                        {data.titles.map((title, idx) => (
-                            <span
-                                key={idx}
-                                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium bg-slate-700/50 text-slate-200 border border-slate-600 hover:border-indigo-500/50 hover:bg-slate-700 transition-colors cursor-default"
-                            >
-                                <Briefcase size={12} className="text-slate-400" />
-                                {title}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-
-            </main>
+                    <Legend />
+                    <Bar dataKey="Impressions" fill="#3B82F6" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="Clicks" fill="#10B981" radius={[4, 4, 0, 0]} />
+                    <Bar dataKey="Leads" name="Leads (x10)" fill="#F59E0B" radius={[4, 4, 0, 0]} />
+                </BarChart>
+            </ResponsiveContainer>
         </div>
     );
 };
 
-export default JanuaryMarketingLeads;
+const GeoPerformanceChart = ({ data }) => (
+    <div className="h-[400px] w-full">
+        <ResponsiveContainer width="100%" height="100%">
+            <BarChart layout="vertical" data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" horizontal={true} vertical={false} stroke="#e2e8f0" />
+                <XAxis type="number" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis dataKey="name" type="category" stroke="#64748b" fontSize={12} tickLine={false} axisLine={false} width={90} />
+                <Tooltip
+                    cursor={{ fill: '#f1f5f9' }}
+                    contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
+                />
+                <Legend />
+                <Bar dataKey="impressions" name="Impressions" fill="#6366f1" radius={[0, 4, 4, 0]} barSize={20} />
+                <Bar dataKey="clicks" name="Clicks" fill="#8b5cf6" radius={[0, 4, 4, 0]} barSize={20} />
+            </BarChart>
+        </ResponsiveContainer>
+    </div>
+);
+
+export default function JanuaryMarketingLeads() {
+    const [selectedSegmentId, setSelectedSegmentId] = useState("embedded");
+
+    // Calculate Aggregates for Overview
+    const totalSpent = Object.values(CAMPAIGN_DATA).reduce((acc, curr) => acc + curr.kpi.spend, 0);
+    const totalImpressions = Object.values(CAMPAIGN_DATA).reduce((acc, curr) => acc + curr.kpi.impressions, 0);
+    const totalLeads = Object.values(CAMPAIGN_DATA).reduce((acc, curr) => acc + curr.kpi.leads, 0);
+    const avgCPL = totalSpent / totalLeads;
+
+    const currentData = CAMPAIGN_DATA[selectedSegmentId];
+
+    return (
+        <div className="min-h-screen bg-slate-50 font-sans text-slate-800 p-4 md:p-8">
+
+            {/* Header */}
+            <div className="max-w-7xl mx-auto mb-8">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <div className="flex items-center gap-2 text-sm text-slate-500 mb-1">
+                            <span>Marketing</span>
+                            <ChevronRight size={14} />
+                            <span>Campaigns</span>
+                            <ChevronRight size={14} />
+                            <span className="text-blue-600 font-medium">Q1 2025</span>
+                        </div>
+                        <h1 className="text-3xl font-bold text-slate-900">January Leads Summary</h1>
+                    </div>
+
+                    <div className="flex gap-3 items-center">
+                        <div className="hidden md:flex items-center gap-6 mr-4 border-r border-slate-200 pr-6">
+                            <a href="#" className="flex items-center gap-2 text-blue-600 font-medium text-sm">
+                                <LayoutDashboard size={16} />
+                                <span>Dashboard</span>
+                            </a>
+                            <Link to="/january-lead-intelligence" className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors font-medium text-sm">
+                                <Activity size={16} />
+                                <span>Intelligence</span>
+                            </Link>
+                            <Link to="/january-mql" className="flex items-center gap-2 text-slate-500 hover:text-slate-800 transition-colors font-medium text-sm border-l pl-4 border-slate-200">
+                                <TrendingUp size={16} />
+                                <span>View MQL</span>
+                            </Link>
+                        </div>
+                        <div className="bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-200 text-sm flex items-center gap-2 text-slate-600">
+                            <Calendar size={16} className="text-slate-400" />
+                            <span>Jan 01 - Jan 31, 2025</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="max-w-7xl mx-auto grid gap-8">
+
+                {/* Aggregate KPIs Row */}
+                <section>
+                    <div className="flex items-center justify-between mb-4">
+                        <h2 className="text-lg font-semibold text-slate-700 flex items-center gap-2">
+                            <Activity className="w-5 h-5 text-indigo-500" /> Overall Performance
+                        </h2>
+                        <span className="text-xs text-slate-500 bg-slate-100 px-2 py-1 rounded">Consolidated View</span>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <KPICard
+                            title="Total Spent"
+                            value={`$${totalSpent.toLocaleString()}`}
+                            subtext="Across 3 campaigns"
+                            icon={DollarSign}
+                            colorClass="bg-blue-500 text-blue-600"
+                        />
+                        <KPICard
+                            title="Total Impressions"
+                            value={(totalImpressions / 1000).toFixed(1) + 'k'}
+                            subtext="Total visibility"
+                            icon={Globe}
+                            colorClass="bg-emerald-500 text-emerald-600"
+                        />
+                        <KPICard
+                            title="Total Leads"
+                            value={totalLeads}
+                            subtext="Conversions generated"
+                            icon={Target}
+                            colorClass="bg-amber-500 text-amber-600"
+                        />
+                        <KPICard
+                            title="Average CPL"
+                            value={`$${avgCPL.toFixed(2)}`}
+                            subtext="Cost Per Lead"
+                            icon={Award}
+                            colorClass="bg-indigo-500 text-indigo-600"
+                        />
+                    </div>
+                </section>
+
+                {/* Main Content Area */}
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+
+                    {/* Left Column: Interactive Detail View */}
+                    <div className="lg:col-span-2 space-y-8">
+
+                        {/* Chart: Comparative Overview */}
+                        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <h3 className="text-lg font-semibold mb-2">Segment Comparison</h3>
+                            <p className="text-sm text-slate-500 mb-6">Traffic volume vs. Lead conversion across engineering verticals.</p>
+                            <ComparisonChart data={CAMPAIGN_DATA} />
+                        </div>
+
+                        {/* Segment Deep Dive */}
+                        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
+                                <h3 className="text-lg font-semibold flex items-center gap-2">
+                                    <Filter className="w-5 h-5 text-slate-400" /> Segment Details
+                                </h3>
+                                <SegmentSelector selected={selectedSegmentId} onSelect={setSelectedSegmentId} />
+                            </div>
+
+                            {/* Selected Segment KPIs */}
+                            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                                <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                                    <p className="text-xs text-slate-500 uppercase font-semibold tracking-wide">Audience</p>
+                                    <p className="text-xl font-bold text-slate-800">{currentData.kpi.audience.toLocaleString()}</p>
+                                </div>
+                                <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                                    <p className="text-xs text-slate-500 uppercase font-semibold tracking-wide">CTR</p>
+                                    <p className="text-xl font-bold text-slate-800">{currentData.kpi.ctr}%</p>
+                                </div>
+                                <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                                    <p className="text-xs text-slate-500 uppercase font-semibold tracking-wide">Unique Reach</p>
+                                    <p className="text-xl font-bold text-slate-800">{currentData.kpi.reach.toLocaleString()}</p>
+                                </div>
+                                <div className="p-4 bg-slate-50 rounded-lg border border-slate-100">
+                                    <p className="text-xs text-slate-500 uppercase font-semibold tracking-wide">CPL</p>
+                                    <p className="text-xl font-bold text-slate-800">${currentData.kpi.cpl}</p>
+                                </div>
+                            </div>
+
+                            {/* Geo Chart */}
+                            <div className="mb-8">
+                                <h4 className="text-md font-medium text-slate-700 mb-4 flex items-center gap-2">
+                                    <Globe size={16} className="text-slate-400" /> Performance by Geography
+                                </h4>
+                                <GeoPerformanceChart data={currentData.geo} />
+                            </div>
+
+                            {/* Geo Table */}
+                            <div className="overflow-x-auto">
+                                <table className="w-full text-sm text-left">
+                                    <thead className="text-xs text-slate-500 uppercase bg-slate-50/50">
+                                        <tr>
+                                            <th className="px-4 py-3 rounded-l-lg font-semibold">Country</th>
+                                            <th className="px-4 py-3 font-semibold text-right">Impressions</th>
+                                            <th className="px-4 py-3 font-semibold text-right">Clicks</th>
+                                            <th className="px-4 py-3 rounded-r-lg font-semibold text-right">Leads</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="divide-y divide-slate-100">
+                                        {currentData.geo.map((geo, idx) => (
+                                            <tr key={idx} className="hover:bg-slate-50 transition-colors">
+                                                <td className="px-4 py-3 font-medium text-slate-700">{geo.name}</td>
+                                                <td className="px-4 py-3 text-right text-slate-500">{geo.impressions.toLocaleString()}</td>
+                                                <td className="px-4 py-3 text-right text-slate-500">{geo.clicks}</td>
+                                                <td className="px-4 py-3 text-right font-semibold">
+                                                    <span className="bg-indigo-50 text-indigo-700 px-2 py-1 rounded-md text-xs">
+                                                        {geo.leads}
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {/* Right Column: Targeting Info & Insights */}
+                    <div className="space-y-8">
+
+                        {/* Audience Targeting Card */}
+                        <div className="bg-white p-6 rounded-xl shadow-sm border border-slate-200">
+                            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2">
+                                <Briefcase className="w-5 h-5 text-slate-500" /> Targeted Titles
+                            </h3>
+                            <p className="text-sm text-slate-500 mb-4">
+                                Primary job titles included in the <strong className="text-slate-700">{currentData.title}</strong> audience segment:
+                            </p>
+                            <div className="flex flex-wrap gap-2">
+                                {currentData.titles.map((title, idx) => (
+                                    <span key={idx} className="px-3 py-1 bg-slate-100 text-slate-600 text-xs font-medium rounded-full border border-slate-200">
+                                        {title}
+                                    </span>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* Quick Insights */}
+                        <div className="bg-indigo-900 p-6 rounded-xl shadow-lg text-white relative overflow-hidden">
+                            <div className="absolute top-0 right-0 p-16 bg-white/5 rounded-full -mr-8 -mt-8 blur-2xl"></div>
+                            <h3 className="text-lg font-semibold mb-4 flex items-center gap-2 relative z-10">
+                                <TrendingUp className="w-5 h-5 text-indigo-300" /> Key Insights
+                            </h3>
+                            <ul className="space-y-5 text-sm text-indigo-100 relative z-10">
+                                <li className="flex gap-3 items-start">
+                                    <span className="bg-indigo-700/50 border border-indigo-600 w-6 h-6 flex items-center justify-center rounded-full shrink-0 text-xs font-bold mt-0.5">1</span>
+                                    <p>
+                                        <strong className="text-white block mb-1">Highest Engagement</strong>
+                                        {currentData.title} shows a {currentData.kpi.ctr}% CTR, performing {currentData.kpi.ctr > 1.0 ? "above" : "within"} industry benchmarks.
+                                    </p>
+                                </li>
+                                <li className="flex gap-3 items-start">
+                                    <span className="bg-indigo-700/50 border border-indigo-600 w-6 h-6 flex items-center justify-center rounded-full shrink-0 text-xs font-bold mt-0.5">2</span>
+                                    <p>
+                                        <strong className="text-white block mb-1">Top Region</strong>
+                                        The United States accounts for {((currentData.geo[0].impressions / currentData.kpi.impressions) * 100).toFixed(0)}% of total impressions this month.
+                                    </p>
+                                </li>
+                                <li className="flex gap-3 items-start">
+                                    <span className="bg-indigo-700/50 border border-indigo-600 w-6 h-6 flex items-center justify-center rounded-full shrink-0 text-xs font-bold mt-0.5">3</span>
+                                    <p>
+                                        <strong className="text-white block mb-1">Audience Reach</strong>
+                                        Currently penetrating {((currentData.kpi.reach / currentData.kpi.audience) * 100).toFixed(1)}% of the total addressable market for this segment.
+                                    </p>
+                                </li>
+                            </ul>
+
+                            <button className="mt-6 w-full py-2 bg-white/10 hover:bg-white/20 transition-colors rounded-lg text-sm font-medium flex items-center justify-center gap-2">
+                                Download Full Report <ArrowUpRight size={14} />
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}

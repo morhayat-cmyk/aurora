@@ -17,6 +17,8 @@ import IntegrationAndFlow from './pages/IntegrationAndFlow';
 import Lociflags from './pages/Lociflags';
 import LociWorks from './pages/LociWorks';
 import JanuaryMarketingLeads from './pages/JanuaryMarketingLeads';
+import JanuaryLeadIntelligence from './pages/JanuaryLeadIntelligence';
+import JanuaryMQL from './pages/JanuaryMQL';
 
 // Main App component that operates as a Router
 export default function App() {
@@ -40,6 +42,8 @@ export default function App() {
         <Route path="/loci-flags" element={<Lociflags />} />
         <Route path="/loci-works" element={<LociWorks />} />
         <Route path="/january-marketing-leads" element={<JanuaryMarketingLeads />} />
+        <Route path="/january-lead-intelligence" element={<JanuaryLeadIntelligence />} />
+        <Route path="/january-mql" element={<JanuaryMQL />} />
       </Routes>
     </Router>
   );
